@@ -1,6 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import React, {useEffect, useMemo} from 'react'
+import React, {useEffect, useLayoutEffect, useMemo} from 'react'
 import {
     Redirect,
     Router,
@@ -108,6 +108,7 @@ type Props = {
 }
 
 const FocalboardRouter = (props: Props): JSX.Element => {
+    const history = useHistory()
     let browserHistory: History<unknown>
     if (props.history) {
         browserHistory = props.history
@@ -116,6 +117,15 @@ const FocalboardRouter = (props: Props): JSX.Element => {
             return createBrowserHistory({basename: Utils.getFrontendBaseURL()})
         }, [])
     }
+
+    /*
+    * 2023-05-10 @tnfl
+    * boards 기능 접근시 기본 페이지로 리턴
+    * */
+    useLayoutEffect(() => {
+        alert('지원하지 않는 기능입니다.');
+        history.push('/')
+    }, []);
 
     useEffect(() => {
         if (window.frontendBaseURL) {
