@@ -851,10 +851,15 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                             {headerTextContainer}
                         </div>
                     </div>
-                    <ChannelHeaderPlug
+
+                    {/*
+                        2023-05-09 @tnfl
+                        채팅방안에 board 아이콘 숨김처리
+                    */}
+                    {/*<ChannelHeaderPlug
                         channel={channel}
                         channelMember={channelMember}
-                    />
+                    />*/}
                     <CallButton/>
                     <ChannelInfoButton channel={channel}/>
                 </div>

@@ -407,8 +407,12 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                     );
                                 }}
                             </Droppable>
-                            {inviteMembersButton}
-                            {addChannelsCtaButton}
+                            {/*
+                                2023-05-09 @tnfl
+                                멤버 초대, 채널 추가 버튼 숨김처리
+                            */}
+                            {/*{inviteMembersButton}*/}
+                            {/*{addChannelsCtaButton}*/}
                         </div>
                     );
                 }}

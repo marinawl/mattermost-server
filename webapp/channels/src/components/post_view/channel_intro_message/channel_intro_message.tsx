@@ -96,16 +96,16 @@ function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles:
 
     if (profiles.length > 0) {
         const pictures = profiles.
-            filter((profile) => profile.id !== currentUserId).
-            map((profile) => (
-                <ProfilePicture
-                    key={'introprofilepicture' + profile.id}
-                    src={Utils.imageURLForUser(profile.id, profile.last_picture_update)}
-                    size='xl'
-                    userId={profile.id}
-                    username={profile.username}
-                />
-            ));
+        filter((profile) => profile.id !== currentUserId).
+        map((profile) => (
+            <ProfilePicture
+                key={'introprofilepicture' + profile.id}
+                src={Utils.imageURLForUser(profile.id, profile.last_picture_update)}
+                size='xl'
+                userId={profile.id}
+                username={profile.username}
+            />
+        ));
 
         return (
             <div
@@ -124,7 +124,12 @@ function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles:
                         }}
                     />
                 </p>
-                <PluggableIntroButtons channel={channel}/>
+
+                {/*
+                    2023-05-10 @tnfl
+                    채팅 인트로 안에 있는 Board 버튼 숨김처리
+                */}
+                {/*<PluggableIntroButtons channel={channel}/>*/}
                 {createSetHeaderButton(channel)}
             </div>
         );
@@ -187,7 +192,11 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                         }}
                     />
                 </p>
-                {pluggableButton}
+                {/*
+                    2023-05-10 @tnfl
+                    채팅 인트로 안에 있는 Board 버튼 숨김처리
+                */}
+                {/*{pluggableButton}*/}
                 {setHeaderButton}
             </div>
         );
@@ -225,14 +234,17 @@ function createOffTopicIntroMessage(channel: Channel, centeredIntro: string, sta
             </ChannelPermissionGate>
         );
     }
-
+    {/*
+        2023-05-10 @tnfl
+        채팅 인트로 안에 있는 Board 버튼 숨김처리
+    */}
     const channelInviteButton = (
         <AddMembersButton
             setHeader={setHeaderButton}
             totalUsers={totalUsers}
             usersLimit={usersLimit}
             channel={channel}
-            pluginButtons={<PluggableIntroButtons channel={channel}/>}
+            // pluginButtons={<PluggableIntroButtons channel={channel}/>}
         />
     );
 
@@ -305,31 +317,35 @@ export function createDefaultIntroMessage(
                     teamId={channel.team_id}
                     permissions={[Permissions.ADD_USER_TO_TEAM]}
                 >
+                    {/*
+                        2023-05-10 @tnfl
+                        채팅 인트로 안에 있는 Board 버튼 숨김처리
+                    */}
                     {!teamIsGroupConstrained &&
                         <AddMembersButton
                             setHeader={setHeaderButton}
                             totalUsers={totalUsers}
                             usersLimit={usersLimit}
                             channel={channel}
-                            pluginButtons={pluginButtons}
+                            // pluginButtons={pluginButtons}
                         />
                     }
                     {teamIsGroupConstrained &&
-                    <ToggleModalButton
-                        className='intro-links color--link'
-                        modalId={ModalIdentifiers.ADD_GROUPS_TO_TEAM}
-                        dialogType={AddGroupsToTeamModal}
-                        dialogProps={{channel}}
-                    >
-                        <LocalizedIcon
-                            className='fa fa-user-plus'
-                            title={{id: t('generic_icons.add'), defaultMessage: 'Add Icon'}}
-                        />
-                        <FormattedMessage
-                            id='intro_messages.addGroupsToTeam'
-                            defaultMessage='Add other groups to this team'
-                        />
-                    </ToggleModalButton>
+                        <ToggleModalButton
+                            className='intro-links color--link'
+                            modalId={ModalIdentifiers.ADD_GROUPS_TO_TEAM}
+                            dialogType={AddGroupsToTeamModal}
+                            dialogProps={{channel}}
+                        >
+                            <LocalizedIcon
+                                className='fa fa-user-plus'
+                                title={{id: t('generic_icons.add'), defaultMessage: 'Add Icon'}}
+                            />
+                            <FormattedMessage
+                                id='intro_messages.addGroupsToTeam'
+                                defaultMessage='Add other groups to this team'
+                            />
+                        </ToggleModalButton>
                     }
                 </TeamPermissionGate>
             </TeamPermissionGate>
@@ -371,7 +387,11 @@ export function createDefaultIntroMessage(
                 }
             </p>
             {teamInviteLink}
-            {teamIsGroupConstrained && pluginButtons}
+            {/*
+                2023-05-10 @tnfl
+                채팅 인트로 안에 있는 Board 버튼 숨김처리
+            */}
+            {/*{teamIsGroupConstrained && pluginButtons}*/}
             {teamIsGroupConstrained && setHeaderButton}
             <br/>
         </div>
@@ -500,13 +520,17 @@ function createStandardIntroMessage(channel: Channel, centeredIntro: string, sta
         );
     }
 
+    /*
+    * 2023-05-10 @tnfl
+    * 채팅 인트로 안에 있는 Board 버튼 숨김처리
+    * */
     const channelInviteButton = (
         <AddMembersButton
             totalUsers={totalUsers}
             usersLimit={usersLimit}
             channel={channel}
             setHeader={setHeaderButton}
-            pluginButtons={<PluggableIntroButtons channel={channel}/>}
+            // pluginButtons={<PluggableIntroButtons channel={channel}/>}
         />
     );
 

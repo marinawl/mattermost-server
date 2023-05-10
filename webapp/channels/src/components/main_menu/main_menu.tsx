@@ -393,7 +393,11 @@ export class MainMenu extends React.PureComponent<Props> {
                 ariaLabel={formatMessage({id: 'sidebar.team_menu.menuAriaLabel', defaultMessage: 'team menu'})}
             >
                 <Menu.Group>
-                    <TeamPermissionGate
+                    {/*
+                        2023-05-09 @tnfl
+                        회사명 클릭시 나오는 메뉴 중 안 쓰는 사이드바 메뉴 숨김처리
+                    */}
+                    {/*<TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -434,7 +438,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamGroupsManageModal}
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate>*/}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
@@ -446,7 +450,11 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/*
+                        2023-05-09 @tnfl
+                        회사명 클릭시 나오는 메뉴 중 안 쓰는 사이드바 메뉴 숨김처리
+                    */}
+                    {/*<TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                         invert={true}
@@ -457,8 +465,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamMembersModal}
                             text={formatMessage({id: 'navbar_dropdown.viewMembers', defaultMessage: 'View Members'})}
                         />
-                    </TeamPermissionGate>
-                    <Menu.ItemLink
+                    </TeamPermissionGate>*/}
+                    {/*<Menu.ItemLink
                         id='joinTeam'
                         show={!this.props.experimentalPrimaryTeam && this.props.moreTeamsToJoin}
                         to='/select_team'
@@ -471,9 +479,13 @@ export class MainMenu extends React.PureComponent<Props> {
                         modalId={ModalIdentifiers.LEAVE_TEAM}
                         dialogType={LeaveTeamModal}
                         text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
-                    />
+                    />*/}
                 </Menu.Group>
-                <Menu.Group>
+                {/*
+                    2023-05-09 @tnfl
+                    회사명 클릭시 나오는 메뉴 중 안 쓰는 사이드바 메뉴 숨김처리
+                */}
+                {/*<Menu.Group>
                     <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
                         <Menu.ItemLink
                             id='createTeam'
@@ -522,7 +534,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             )}
                         />
                     </SystemPermissionGate>
-                </Menu.Group>
+                </Menu.Group>*/}
                 <Menu.Group>
                     {pluginItems}
                 </Menu.Group>

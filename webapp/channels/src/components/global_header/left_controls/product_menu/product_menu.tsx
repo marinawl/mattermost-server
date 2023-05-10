@@ -25,7 +25,7 @@ import {
     OnboardingTaskCategory,
     OnboardingTasksName,
     TaskNameMapToSteps,
-    useHandleOnBoardingTaskData,
+    useHandleOnBoardingTaskData, VisitSystemConsoleTour,
 } from 'components/onboarding_tasks';
 import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
 import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
@@ -38,6 +38,12 @@ import {useClickOutsideRef} from '../../hooks';
 import ProductBranding from './product_branding';
 import ProductMenuItem from './product_menu_item';
 import ProductMenuList from './product_menu_list';
+import {Permissions} from 'mattermost-redux/constants';
+import {ApplicationCogIcon} from '@mattermost/compass-icons/components';
+import SystemPermissionGate from '../../../permissions_gates/system_permission_gate';
+import {getIsMobileView} from '../../../../selectors/views/browser';
+import {Props} from "./product_menu_list/product_menu_list";
+import {Link} from "react-router-dom";
 
 export const ProductMenuContainer = styled.nav`
     display: flex;
@@ -140,13 +146,25 @@ const ProductMenu = (): JSX.Element => {
                 open={switcherOpen}
             >
                 <ProductMenuContainer onClick={handleClick}>
-                    <ProductMenuButton
-                        active={switcherOpen}
-                        aria-expanded={switcherOpen}
-                        aria-label={formatMessage({id: 'global_header.productSwitchMenu', defaultMessage: 'Product switch menu'})}
-                        aria-controls='product-switcher-menu'
-                    />
-                    <ProductBranding/>
+                    {/*
+                        2023-05-09 @tnfl
+                        최상단 메뉴버튼을 관리자만 볼 수 있게 변경 ( 관리자 도구, 플러그인, 정보 등등 )
+                        메뉴버튼 상단에 SystemPermissionGate 태그 추가
+                    */}
+                    <SystemPermissionGate permissions={Permissions.SYSCONSOLE_READ_PERMISSIONS}>
+                        <ProductMenuButton
+                            active={switcherOpen}
+                            aria-expanded={switcherOpen}
+                            aria-label={formatMessage({id: 'global_header.productSwitchMenu', defaultMessage: 'Product switch menu'})}
+                            aria-controls='product-switcher-menu'
+                        />
+                    </SystemPermissionGate>
+
+                    {/*
+                        2023-05-09 @tnfl
+                        상단 채널 로고 숨김처리
+                    */}
+                    {/*<ProductBranding/>*/}
                 </ProductMenuContainer>
                 <Menu
                     listId={'product-switcher-menu-dropdown'}
@@ -154,14 +172,19 @@ const ProductMenu = (): JSX.Element => {
                     id={'product-switcher-menu'}
                     ariaLabel={'switcherOpen'}
                 >
-                    <ProductMenuItem
+
+                    {/*
+                        2023-05-09 @tnfl
+                        상단 메뉴 클릭시 나오는 Boards, Channels 탭 숨김처리
+                    */}
+                    {/*<ProductMenuItem
                         destination={'/'}
                         icon={'product-channels'}
                         text={'Channels'}
                         active={isChannels(currentProductID)}
                         onClick={handleClick}
                     />
-                    {productItems}
+                    {productItems}*/}
                     <ProductMenuList
                         isMessaging={isChannels(currentProductID)}
                         onClick={handleClick}

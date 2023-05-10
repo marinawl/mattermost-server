@@ -125,9 +125,13 @@ const AboutAreaGM = ({channel, gmUsers, actions}: Props) => {
                 />
             </ChannelHeader>
 
-            <ChannelId>
+            {/*
+                2023-05-09 @tnfl
+                채팅방 Info 탭안에 채널 ID 숨김처리
+            */}
+            {/*<ChannelId>
                 {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {channel.id}
-            </ChannelId>
+            </ChannelId>*/}
         </>
     );
 };
