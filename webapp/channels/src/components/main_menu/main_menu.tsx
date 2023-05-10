@@ -439,17 +439,12 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                         />
                     </TeamPermissionGate>*/}
-                    <TeamPermissionGate
-                        teamId={teamId}
-                        permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
-                    >
-                        <Menu.ItemToggleModalRedux
-                            id='manageMembers'
-                            modalId={ModalIdentifiers.TEAM_MEMBERS}
-                            dialogType={TeamMembersModal}
-                            text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
-                        />
-                    </TeamPermissionGate>
+                    <Menu.ItemToggleModalRedux
+                        id='manageMembers'
+                        modalId={ModalIdentifiers.TEAM_MEMBERS}
+                        dialogType={TeamMembersModal}
+                        text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
+                    />
                     {/*
                         2023-05-09 @tnfl
                         회사명 클릭시 나오는 메뉴 중 안 쓰는 사이드바 메뉴 숨김처리

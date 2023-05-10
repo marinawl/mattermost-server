@@ -89,7 +89,7 @@ export default class TeamMembersModal extends React.PureComponent<Props, State> 
                             }}
                         />
                     </Modal.Title>
-                    <TeamPermissionGate
+                    {/*<TeamPermissionGate
                         teamId={this.props.currentTeam.id}
                         permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
                     >
@@ -104,7 +104,7 @@ export default class TeamMembersModal extends React.PureComponent<Props, State> 
                                 defaultMessage='Invite People'
                             />
                         </button>
-                    </TeamPermissionGate>
+                    </TeamPermissionGate>*/}
                 </Modal.Header>
                 <Modal.Body>
                     <MemberListTeam
