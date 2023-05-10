@@ -39,14 +39,17 @@ services:
     volumes:
       - ./docker/mysql.conf.d/replica.cnf:/etc/mysql/conf.d/mysql.cnf
   postgres:
-    image: "postgres:10"
-    restart: always
+    image: "postgres:13-alpine"
+    restart: unless-stopped
+    ports:
+      - 5433:5432
     networks:
       - mm-test
     environment:
+      TZ: Asia/Seoul
       POSTGRES_USER: mmuser
-      POSTGRES_PASSWORD: mostest
-      POSTGRES_DB: mattermost_test
+      POSTGRES_PASSWORD: mmuser_password
+      POSTGRES_DB: mattermost
     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
      - "./docker/postgres.conf:/etc/postgresql/postgresql.conf"
