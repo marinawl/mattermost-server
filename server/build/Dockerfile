@@ -8,7 +8,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV PATH="/mattermost/bin:${PATH}"
 ARG PUID=2000
 ARG PGID=2000
-ARG MM_PACKAGE="https://releases.mattermost.com/7.10.0/mattermost-7.10.0-linux-amd64.tar.gz?src=docker"
+ARG MM_PACKAGE="../dist/mattermost-team-linux-amd64.tar.gz"
+ARG MM_CONFIG="../config/config.json"
 
 # # Install needed packages and indirect dependencies
 RUN apt-get update \
@@ -22,13 +23,18 @@ RUN apt-get update \
   tidy \
   && rm -rf /var/lib/apt/lists/*
 
+ADD ${MM_PACKAGE} /
+COPY ${MM_CONFIG} /mattermost/config
+
 # Set mattermost group/user and download Mattermost
 RUN mkdir -p /mattermost/data /mattermost/plugins /mattermost/client/plugins \
   && addgroup -gid ${PGID} mattermost \
   && adduser -q --disabled-password --uid ${PUID} --gid ${PGID} --gecos "" --home /mattermost mattermost \
-  && if [ -n "$MM_PACKAGE" ]; then curl $MM_PACKAGE | tar -xvz ; \
-  else echo "please set the MM_PACKAGE" ; exit 127 ; fi \
-  && chown -R mattermost:mattermost /mattermost /mattermost/data /mattermost/plugins /mattermost/client/plugins
+  #&& chown -R mattermost:mattermost ${MM_PACKAGE} \
+  #&& if [ -n "$MM_PACKAGE" ]; then tar -xzf $MM_PACKAGE > /dev/null ; \
+  #else echo "please set the MM_PACKAGE" ; exit 127 ; fi \
+  && chmod -R 755 /mattermost/bin \
+  && chown -R mattermost:mattermost /mattermost /mattermost/bin /mattermost/data /mattermost/plugins /mattermost/client/plugins
 
 # We should refrain from running as privileged user
 USER mattermost
