@@ -85,7 +85,8 @@ const NewChannelModal = () => {
     const canCreatePrivateChannel = useSelector((state: GlobalState) => (currentTeamId ? haveICurrentChannelPermission(state, Permissions.CREATE_PRIVATE_CHANNEL) : false));
     const dispatch = useDispatch<DispatchFunc>();
 
-    const [type, setType] = useState(getChannelTypeFromPermissions(canCreatePublicChannel, canCreatePrivateChannel));
+    // const [type, setType] = useState(getChannelTypeFromPermissions(canCreatePublicChannel, canCreatePrivateChannel));
+    const [type, setType] = useState(Constants.PRIVATE_CHANNEL as ChannelType);
     const [displayName, setDisplayName] = useState('');
     const [url, setURL] = useState('');
     const [purpose, setPurpose] = useState('');
@@ -381,14 +382,14 @@ const NewChannelModal = () => {
                             </span>
                         </div>
                     )}
-                    {createBoardFromChannelPlugin &&
+                    {/*{createBoardFromChannelPlugin &&
                         <Pluggable
                             pluggableName='CreateBoardFromTemplate'
                             setCanCreate={setCanCreateFromPluggable}
                             setAction={setActionFromPluggable}
                             newBoardInfoIcon={newBoardInfoIcon}
                         />
-                    }
+                    }*/}
                 </div>
             </div>
         </GenericModal>
