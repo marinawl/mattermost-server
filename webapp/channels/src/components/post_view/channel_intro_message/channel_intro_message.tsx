@@ -126,7 +126,7 @@ function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles:
                 </p>
 
                 {/*
-                    2023-05-10 @tnfl
+                    2023-05-10
                     채팅 인트로 안에 있는 Board 버튼 숨김처리
                 */}
                 {/*<PluggableIntroButtons channel={channel}/>*/}
@@ -193,7 +193,7 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                     />
                 </p>
                 {/*
-                    2023-05-10 @tnfl
+                    2023-05-10
                     채팅 인트로 안에 있는 Board 버튼 숨김처리
                 */}
                 {/*{pluggableButton}*/}
@@ -235,7 +235,7 @@ function createOffTopicIntroMessage(channel: Channel, centeredIntro: string, sta
         );
     }
     {/*
-        2023-05-10 @tnfl
+        2023-05-10
         채팅 인트로 안에 있는 Board 버튼 숨김처리
     */}
     const channelInviteButton = (
@@ -318,7 +318,7 @@ export function createDefaultIntroMessage(
                     permissions={[Permissions.ADD_USER_TO_TEAM]}
                 >
                     {/*
-                        2023-05-10 @tnfl
+                        2023-05-10
                         채팅 인트로 안에 있는 Board 버튼 숨김처리
                     */}
                     {!teamIsGroupConstrained &&
@@ -388,7 +388,7 @@ export function createDefaultIntroMessage(
             </p>
             {teamInviteLink}
             {/*
-                2023-05-10 @tnfl
+                2023-05-10
                 채팅 인트로 안에 있는 Board 버튼 숨김처리
             */}
             {/*{teamIsGroupConstrained && pluginButtons}*/}
@@ -521,7 +521,7 @@ function createStandardIntroMessage(channel: Channel, centeredIntro: string, sta
     }
 
     /*
-    * 2023-05-10 @tnfl
+    * 2023-05-10
     * 채팅 인트로 안에 있는 Board 버튼 숨김처리
     * */
     const channelInviteButton = (

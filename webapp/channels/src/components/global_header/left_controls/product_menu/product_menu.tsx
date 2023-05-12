@@ -147,7 +147,7 @@ const ProductMenu = (): JSX.Element => {
             >
                 <ProductMenuContainer onClick={handleClick}>
                     {/*
-                        2023-05-09 @tnfl
+                        2023-05-09
                         최상단 메뉴버튼을 관리자만 볼 수 있게 변경 ( 관리자 도구, 플러그인, 정보 등등 )
                         메뉴버튼 상단에 SystemPermissionGate 태그 추가
                     */}
@@ -161,7 +161,7 @@ const ProductMenu = (): JSX.Element => {
                     </SystemPermissionGate>
 
                     {/*
-                        2023-05-09 @tnfl
+                        2023-05-09
                         상단 채널 로고 숨김처리
                     */}
                     {/*<ProductBranding/>*/}
@@ -174,7 +174,7 @@ const ProductMenu = (): JSX.Element => {
                 >
 
                     {/*
-                        2023-05-09 @tnfl
+                        2023-05-09
                         상단 메뉴 클릭시 나오는 Boards, Channels 탭 숨김처리
                     */}
                     {/*<ProductMenuItem

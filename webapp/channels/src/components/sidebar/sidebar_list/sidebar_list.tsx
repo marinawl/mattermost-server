@@ -536,7 +536,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
             // NOTE: id attribute added to temporarily support the desktop app's at-mention DOM scraping of the old sidebar
             <>
                 {/*
-                    2023-05-09 @tnfl
+                    2023-05-09
                     안 쓰는 사이드바 메뉴 숨김처리
                 */}
                 {/*<ActivityAndInsightsLink/>*/}

@@ -142,7 +142,7 @@ const AddChannelDropdown = ({
         return (
             <>
                 {/*
-                    2023-05-09 @tnfl
+                    2023-05-09
                     사이드 바 + 메뉴 중 안 쓰는 메뉴 숨김처리
                 */}
                 <Menu.Group>
