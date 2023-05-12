@@ -49,7 +49,10 @@ const CustomStatusSuggestion: React.FC<Props> = (props: Props) => {
                     placement='top'
                     overlay={
                         <Tooltip id='clear-recent-custom-status'>
-                            {'Clear'}
+                            <FormattedMessage
+                                id={'input.clear'}
+                                defaultMessage='Clear'
+                            />
                         </Tooltip>
                     }
                 >
