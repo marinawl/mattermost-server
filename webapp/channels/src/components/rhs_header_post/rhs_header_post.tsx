@@ -192,14 +192,13 @@ export default class RhsHeaderPost extends React.PureComponent<RhsHeaderPostProp
                     }
                 </span>
                 <div className='controls'>
-                    {/* 글타래 안 Follow 버튼 숨김처리 */}
-                    {/*{this.props.isCollapsedThreadsEnabled ? (
+                    {this.props.isCollapsedThreadsEnabled ? (
                         <FollowButton
                             className='sidebar--right__follow__thread'
                             isFollowing={isFollowingThread}
                             onClick={this.handleFollowChange}
                         />
-                    ) : null}*/}
+                    ) : null}
 
                     <OverlayTrigger
                         delayShow={Constants.OVERLAY_TIME_DELAY}
