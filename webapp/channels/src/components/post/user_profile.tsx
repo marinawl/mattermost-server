@@ -151,7 +151,6 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
         }
     }
 
-    // 2023-05-12
     // 검색 결과창에서 사용자 상태 변환 기능 주석
     return (<div className='col col__name'>
         {userProfile}

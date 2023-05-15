@@ -853,7 +853,6 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     </div>
 
                     {/*
-                        2023-05-09
                         채팅방안에 board 아이콘 숨김처리
                     */}
                     {/*<ChannelHeaderPlug
