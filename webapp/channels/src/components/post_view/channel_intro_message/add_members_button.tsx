@@ -75,7 +75,8 @@ const LessThanMaxFreeUsers = ({setHeader, pluginButtons}: {setHeader: React.Reac
         <>
             {pluginButtons}
             {setHeader}
-            <div className='LessThanMaxFreeUsers'>
+            {/* 멤버 초대기능 숨김처리 */}
+            {/*<div className='LessThanMaxFreeUsers'>
                 <EmptyStateThemeableSvg
                     width={128}
                     height={113}
@@ -103,7 +104,7 @@ const LessThanMaxFreeUsers = ({setHeader, pluginButtons}: {setHeader: React.Reac
                         />
                     </ToggleModalButton>
                 </div>
-            </div>
+            </div>*/}
         </>
     );
 };
