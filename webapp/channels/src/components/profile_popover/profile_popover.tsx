@@ -571,7 +571,8 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
                 fromWebhook={this.props.fromWebhook}
             />,
         );
-        if (
+        /* Local Time 숨김처리 */
+        /*if (
             this.props.enableTimezone &&
             this.props.user.timezone &&
             !haveOverrideProp
@@ -583,7 +584,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
                     key='user-popover-local-time'
                 />,
             );
-        }
+        }*/
 
         const customStatusAndExpiryContent = !haveOverrideProp && this.renderCustomStatus();
         if (customStatusAndExpiryContent) {

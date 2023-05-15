@@ -58,17 +58,17 @@ const ExpiryTime = ({time, timezone, className, showPrefix, withinBrackets}: Pro
             <FormattedMessage
                 id='custom_status.expiry.until'
                 defaultMessage='Until'
-            />{' '}
+            />
         </>
     );
 
     return (
         <span className={className}>
-            {withinBrackets && '('}
-            {prefix}
+            {withinBrackets && '('}{' '}
             <Timestamp
                 {...timestampProps}
-            />
+            />{' '}
+            {prefix}{' '}
             {withinBrackets && ')'}
         </span>
     );

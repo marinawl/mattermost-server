@@ -126,11 +126,12 @@ function ThreadFooter({
                 </Button>
             )}
 
-            <FollowButton
+            {/* Following 버튼 숨김처리 */}
+            {/*<FollowButton
                 isFollowing={isFollowing}
                 className='separated'
                 onClick={handleFollowing}
-            />
+            />*/}
 
             {Boolean(lastReplyAt) && (
                 <Timestamp

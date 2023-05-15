@@ -229,6 +229,7 @@ const PostComponent = (props: Props): JSX.Element => {
         let name: React.ReactNode = props.channelName;
 
         const isDirectMessage = props.channelType === Constants.DM_CHANNEL;
+        const isChannelMessage = props.channelType === Constants.PRIVATE_CHANNEL;
         const isPartOfThread = props.isCollapsedThreadsEnabled && (post.reply_count > 0 || post.is_following);
 
         if (isDirectMessage && isPartOfThread) {
@@ -258,6 +259,16 @@ const PostComponent = (props: Props): JSX.Element => {
                     defaultMessage='Direct Message (with {username})'
                     values={{
                         username: props.displayName,
+                    }}
+                />
+            );
+        } else if (isChannelMessage && !isPartOfThread) {
+            name = (
+                <FormattedMessage
+                    id='search_item.channel'
+                    defaultMessage='Channel (with {channel})'
+                    values={{
+                        channel: props.channelName,
                     }}
                 />
             );

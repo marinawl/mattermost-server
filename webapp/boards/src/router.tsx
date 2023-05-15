@@ -119,7 +119,6 @@ const FocalboardRouter = (props: Props): JSX.Element => {
     }
 
     /*
-    * 2023-05-10 @tnfl
     * boards 기능 접근시 기본 페이지로 리턴
     * */
     useLayoutEffect(() => {

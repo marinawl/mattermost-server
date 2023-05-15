@@ -24,6 +24,7 @@
     }
   },
   "rules": {
+    "linebreak-style": 0,
     "header/header": [
       2,
       "line",

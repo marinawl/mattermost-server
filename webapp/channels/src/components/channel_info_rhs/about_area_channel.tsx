@@ -86,7 +86,6 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
             )}
 
             {/*
-                2023-05-09 @tnfl
                 채팅방 Info 탭안에 채널 ID 숨김처리
             */}
             {/*<ChannelId>

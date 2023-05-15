@@ -162,7 +162,7 @@ const PublicPrivateSelector = ({
 
     return (
         <div className={classNames('public-private-selector', className)}>
-            <BigButtonSelector
+            {/*<BigButtonSelector
                 id={Constants.OPEN_CHANNEL as ChannelType}
                 title={titlePublic || formatMessage({id: 'public_private_selector.public.title', defaultMessage: 'Public'})}
                 description={descriptionPublic || formatMessage({id: 'public_private_selector.public.description', defaultMessage: 'Anyone'})}
@@ -175,7 +175,7 @@ const PublicPrivateSelector = ({
                 disabled={disabledPublic}
                 locked={lockedPublic}
                 onClick={handleOnClick}
-            />
+            />*/}
             <BigButtonSelector
                 id={Constants.PRIVATE_CHANNEL as ChannelType}
                 title={titlePrivate || formatMessage({id: 'public_private_selector.private.title', defaultMessage: 'Private'})}

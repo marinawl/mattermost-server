@@ -277,7 +277,8 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                         isDefault={isDefault}
                         isGuestUser={isGuest(user.roles)}
                     />
-                    <ChannelPermissionGate
+                    {/* 단체방 보관 기능 숨김처리 */}
+                    {/*<ChannelPermissionGate
                         channelId={channel.id}
                         teamId={channel.team_id}
                         permissions={[channelDeletePermission]}
@@ -294,7 +295,7 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             }}
                             text={localizeMessage('channel_header.delete', 'Archive Channel')}
                         />
-                    </ChannelPermissionGate>
+                    </ChannelPermissionGate>*/}
                     {isMobile &&
                         <MobileChannelHeaderPlug
                             channel={channel}

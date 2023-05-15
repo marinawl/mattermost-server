@@ -43,4 +43,11 @@
             color: var(--button-bg);
         }
     }
+
+    // 모든 파일 구분 separator 추가
+    .MuiDivider-root {
+        margin: 0 14px 4px 14px;
+        padding-top: 2px;
+        border-color: #cccccc;
+    }
 }

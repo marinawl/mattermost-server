@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {FilterVariantIcon} from '@mattermost/compass-icons/components';
 
@@ -15,6 +15,7 @@ import {SearchFilterType} from '../search/types';
 import {IconContainer} from '../advanced_text_editor/formatting_bar/formatting_icon';
 
 import './files_filter_menu.scss';
+import {MenuItemSeparator} from '../menu/menu_item_separator';
 
 type Props = {
     selectedFilter: string;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function FilesFilterMenu(props: Props): JSX.Element {
+    const {formatMessage} = useIntl();
     const toolTip = (
         <Tooltip
             id='files-filter-tooltip'
@@ -33,6 +35,7 @@ export default function FilesFilterMenu(props: Props): JSX.Element {
             />
         </Tooltip>
     );
+
     return (
         <div className='FilesFilterMenu'>
             <MenuWrapper>
@@ -61,49 +64,50 @@ export default function FilesFilterMenu(props: Props): JSX.Element {
                 >
                     <Menu.ItemAction
                         ariaLabel={'All file types'}
-                        text={'All file types'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.all_file_type', defaultMessage: 'All file types'})}
                         onClick={() => props.onFilter('all')}
                         icon={props.selectedFilter === 'all' ? <i className='icon icon-check'/> : null}
                     />
+                    <MenuItemSeparator/>
                     <Menu.ItemAction
                         ariaLabel={'Documents'}
-                        text={'Documents'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.documents', defaultMessage: 'Documents'})}
                         onClick={() => props.onFilter('documents')}
                         icon={props.selectedFilter === 'documents' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Spreadsheets'}
-                        text={'Spreadsheets'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.spreadsheets', defaultMessage: 'Spreadsheets'})}
                         onClick={() => props.onFilter('spreadsheets')}
                         icon={props.selectedFilter === 'spreadsheets' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Presentations'}
-                        text={'Presentations'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.presentations', defaultMessage: 'Presentations'})}
                         onClick={() => props.onFilter('presentations')}
                         icon={props.selectedFilter === 'presentations' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Code'}
-                        text={'Code'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.code', defaultMessage: 'Code'})}
                         onClick={() => props.onFilter('code')}
                         icon={props.selectedFilter === 'code' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Images'}
-                        text={'Images'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.images', defaultMessage: 'Images'})}
                         onClick={() => props.onFilter('images')}
                         icon={props.selectedFilter === 'images' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Audio'}
-                        text={'Audio'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.audio', defaultMessage: 'Audio'})}
                         onClick={() => props.onFilter('audio')}
                         icon={props.selectedFilter === 'audio' ? <i className='icon icon-check'/> : null}
                     />
                     <Menu.ItemAction
                         ariaLabel={'Videos'}
-                        text={'Videos'}
+                        text={formatMessage({id: 'channel_info_rhs.menu.files.filter.videos', defaultMessage: 'Videos'})}
                         onClick={() => props.onFilter('video')}
                         icon={props.selectedFilter === 'video' ? <i className='icon icon-check'/> : null}
                     />
