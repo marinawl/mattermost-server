@@ -169,8 +169,9 @@ function PostPriorityPicker({
                     id: 'post_priority.picker.header',
                     defaultMessage: 'Message priority',
                 })}
-                <BetaTag/>
-                <Feedback
+                {/* 채팅 우선 순위 베타, feedback 기능 숨김처리 */}
+                {/*<BetaTag/>*/}
+                {/*<Feedback
                     href={feedbackLink}
                     target='_blank'
                     rel='noopener noreferrer'
@@ -179,7 +180,7 @@ function PostPriorityPicker({
                         id={'post_priority.picker.feedback'}
                         defaultMessage={'Give feedback'}
                     />
-                </Feedback>
+                </Feedback>*/}
             </Header>
             <div role='application'>
                 <Menu className='Menu'>
