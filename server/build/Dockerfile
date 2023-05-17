@@ -8,8 +8,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV PATH="/mattermost/bin:${PATH}"
 ARG PUID=2000
 ARG PGID=2000
-ARG MM_PACKAGE="/package/mattermost-team-linux-amd64.tar.gz"
-ARG MM_CONFIG="/package/config.json"
+ARG MM_PACKAGE="../dist/mattermost-team-linux-amd64.tar.gz"
+ARG MM_CONFIG="../config/config.json"
 
 # # Install needed packages and indirect dependencies
 RUN apt-get update \
@@ -44,7 +44,7 @@ HEALTHCHECK --interval=30s --timeout=10s \
   CMD curl -f http://localhost:8065/api/v4/system/ping || exit 1
 
 # Configure entrypoint and command
-COPY entrypoint.sh /
+COPY /build/entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /mattermost
 CMD ["mattermost"]
