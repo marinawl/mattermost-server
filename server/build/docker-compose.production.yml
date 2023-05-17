@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   mattermost:
-    image: test_mattermost:1.0
+    image: mattermost_server:1.0
     restart: unless-stopped
     networks:
       - mm-test
@@ -14,13 +14,13 @@ services:
 
       # necessary Mattermost options/variables (see env.example)
       MM_SQLSETTINGS_DRIVERNAME: postgres
-      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@host.docker.internal:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@192.168.30.15:5432/mattermost?sslmode=disable&connect_timeout=10
 
       # necessary for bleve
       MM_BLEVESETTINGS_INDEXDIR: /mattermost/bleve-indexes
 
       # additional settings
-      MM_SERVICESETTINGS_SITEURL: https://192.168.30.14
+      MM_SERVICESETTINGS_SITEURL: https://192.168.30.15
 networks:
   mm-test:
     driver: bridge
