@@ -8,8 +8,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV PATH="/mattermost/bin:${PATH}"
 ARG PUID=2000
 ARG PGID=2000
-ARG MM_PACKAGE="../dist/mattermost-team-linux-amd64.tar.gz"
-ARG MM_CONFIG="../config/config.json"
+ARG MM_PACKAGE="/dist/mattermost-team-linux-amd64.tar.gz"
+ARG MM_CONFIG="/config/config.json"
 
 # # Install needed packages and indirect dependencies
 RUN apt-get update \
