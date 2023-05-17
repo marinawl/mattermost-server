@@ -1,7 +1,7 @@
 version: '2.4'
-services:  
+services:
   mattermost:
-    image: test_mattermost:1.0
+    image: mattermost_server:1.0
     restart: unless-stopped
     networks:
       - mm-test
