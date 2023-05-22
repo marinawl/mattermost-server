@@ -59,8 +59,8 @@
                 svg {
                     position: absolute;
                     z-index: 2;
-                    bottom: -210px;
-                    left: -178px;
+                    bottom: -225px;
+                    left: -335px;
                     display: block;
                 }
             }
@@ -86,6 +86,7 @@
             }
 
             &.with-alternate-link {
+                padding-left: 10rem;
                 margin-top: 40px;
             }
         }
@@ -230,7 +231,7 @@
 
         .login-body-message .login-body-message-title {
             padding-right: 110px;
-            margin-top: 48px;
+            margin-top: 25px;
         }
     }
 }

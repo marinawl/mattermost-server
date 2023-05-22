@@ -3782,5 +3782,7 @@
   "mark_all_threads_as_read_modal.description": "이렇게 하면 모든 글타래에서 읽지 않은 상태와 멘션 배지가 지워집니다. 모두 읽은 것으로 표시하시겠습니까 ?",
   "globalThreads.threadPane.unselectedTitle": "다들 바쁘신 것 같군요",
   "globalThreads.threadPane.unreadMessageLink": "읽지 않은 글타래가 없습니다.",
-  "threading.numNewReplies": "{newReplies} 새 답장"
+  "threading.numNewReplies": "{newReplies} 새 답장",
+  "login.title": "ILS 메신저",
+  "login.subtitle": "(유)일성 메신저"
 }

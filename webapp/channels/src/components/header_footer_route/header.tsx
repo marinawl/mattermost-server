@@ -6,7 +6,8 @@ import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
 import BackButton from 'components/common/back_button';
-import Logo from 'components/common/svg_images_components/logo_dark_blue_svg';
+// import Logo from 'components/common/svg_images_components/logo_dark_blue_svg';
+import Logo from '../../images/logo_ilseong.png';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
@@ -28,7 +29,7 @@ const Header = ({alternateLink, backButtonURL, onBackButtonClick}: HeaderProps) 
                     className='header-logo-link'
                     to='/'
                 >
-                    {EnableCustomBrand === 'true' || SiteName !== 'Mattermost' ? SiteName : <Logo/>}
+                    {EnableCustomBrand === 'true' || SiteName !== 'Mattermost' ? SiteName : <img src={Logo} alt={'IL SEONG'}/>}
                 </Link>
                 {alternateLink}
             </div>
