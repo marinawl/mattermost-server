@@ -235,7 +235,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         icon={<i className='fa fa-cog'/>}
                     />
                 </Menu.Group>
-                <Menu.Group>
+                {/*<Menu.Group>
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -255,9 +255,9 @@ export class MainMenu extends React.PureComponent<Props> {
                     >
                         {invitePeopleModal}
                     </TeamPermissionGate>
-                </Menu.Group>
+                </Menu.Group>*/}
                 <Menu.Group>
-                    <TeamPermissionGate
+                    {/*<TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -296,7 +296,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                             icon={<i className='fa fa-users'/>}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate>*/}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
@@ -311,7 +311,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         />
                     </TeamPermissionGate>
                 </Menu.Group>
-                <Menu.Group>
+                {/*<Menu.Group>
                     <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
                         <Menu.ItemLink
                             id='createTeam'
@@ -339,7 +339,7 @@ export class MainMenu extends React.PureComponent<Props> {
                 </Menu.Group>
                 <Menu.Group>
                     {pluginItems}
-                </Menu.Group>
+                </Menu.Group>*/}
                 <Menu.Group>
                     <Menu.ItemLink
                         id='integrations'
@@ -348,7 +348,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
                     />
                 </Menu.Group>
-                <Menu.Group>
+                {/*<Menu.Group>
                     <Menu.ItemExternalLink
                         id='helpLink'
                         show={Boolean(this.props.helpLink)}
@@ -377,7 +377,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.about', defaultMessage: 'About {appTitle}'}, {appTitle: this.props.siteName || 'Mattermost'})}
                         icon={<i className='fa fa-info'/>}
                     />
-                </Menu.Group>
+                </Menu.Group>*/}
                 <Menu.Group>
                     <Menu.ItemAction
                         id='logout'
