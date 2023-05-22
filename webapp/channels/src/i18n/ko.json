@@ -2187,7 +2187,7 @@
   "channel_header.unarchive": "채널 보관 해제",
   "channel_header.unmute": "채널 알림 끄기",
   "channel_header.userHelpGuide": "도움말",
-  "channel_header.viewMembers": "회원 보기",
+  "channel_header.viewMembers": "멤버 보기",
   "channel_invite.addNewMembers": "{channel}에 새로운 멤버 추가하기",
   "channel_loader.postedImage": " uploaded an image",
   "channel_loader.socketError": "Mattermost에 연결이 안되므로 연결 상태를 확인하십시오. 문제가 지속되면 관리자에게 [WebSocket 포트 확인](!https://docs.mattermost.com/install/troubleshooting.html#please-check-connection-mattermost-unreachable-if-issue-persists-ask-administrator-to-check-websocket-port)을 문의하십시오.",
@@ -2856,10 +2856,11 @@
   "navbar_dropdown.menuAriaLabel": "메인 메뉴",
   "navbar_dropdown.nativeApps": "애플리케이션 다운로드",
   "navbar_dropdown.profileSettings": "계정 설정",
+  "navbar_dropdown.accountSettings": "설정",
   "navbar_dropdown.report": "문제 보고",
   "navbar_dropdown.switchTo": "팀 변경: ",
   "navbar_dropdown.teamSettings": "팀 설정",
-  "navbar_dropdown.viewMembers": "회원 보기",
+  "navbar_dropdown.viewMembers": "멤버 보기",
   "notification.dm": "개인 메시지",
   "notify_all.confirm": "확인",
   "notify_all.question": "@all, @channel 을 사용하면 {totalMembers} 명의 사람들에게 알림을 보냅니다. 정말 맨션을 사용하시겠습니까?",
@@ -3784,5 +3785,6 @@
   "globalThreads.threadPane.unreadMessageLink": "읽지 않은 글타래가 없습니다.",
   "threading.numNewReplies": "{newReplies} 새 답장",
   "login.title": "ILS 메신저",
-  "login.subtitle": "(유)일성 메신저"
+  "login.subtitle": "(유)일성 메신저",
+  "search_header.search": "검색"
 }

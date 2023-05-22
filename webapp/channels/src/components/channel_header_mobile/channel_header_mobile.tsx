@@ -115,12 +115,12 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                             />
                         )}
                         <ShowSearchButton/>
-                        {channel && (
+                        {/*{channel && (
                             <MobileChannelHeaderPlug
                                 channel={channel}
                                 isDropdown={false}
                             />
-                        )}
+                        )}*/}
                         <CollapseRhsButton/>
                     </div>
                 </div>
