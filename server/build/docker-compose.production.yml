@@ -1,26 +1,26 @@
 version: '2.4'
 services:
   mattermost:
-    image: mattermost_server:1.0
-    restart: unless-stopped
+    image: ${DOCKER_IMAGE_NM}:${DOCKER_IMAGE_VERSION}
+    container_name: ${DOCKER_CONTAINER_NM}_${DOCKER_CONTAINER_TYPE}
     networks:
       - mm-test
     ports:
-      - 8065:8065
-      - 8443:8443/udp
+      - ${DOCEKR_CONTAINER_PORT}:8065
+    #  - 8443:8443/udp
     environment:
       # timezone inside container
       TZ: /Asia/Seoul
 
       # necessary Mattermost options/variables (see env.example)
       MM_SQLSETTINGS_DRIVERNAME: postgres
-      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@192.168.30.15:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_SQLSETTINGS_DATASOURCE: postgres://${DB_ID}:${DB_PW}@${DB_HOST}:${DB_PORT}/${DB_NM}?sslmode=disable&connect_timeout=10
 
       # necessary for bleve
       MM_BLEVESETTINGS_INDEXDIR: /mattermost/bleve-indexes
 
       # additional settings
-      MM_SERVICESETTINGS_SITEURL: https://192.168.30.15
+      MM_SERVICESETTINGS_SITEURL: ${SITE_URL}
 networks:
   mm-test:
     driver: bridge
