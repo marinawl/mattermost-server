@@ -287,14 +287,14 @@ if (DEV) {
                 const playbooksDist = path.resolve(__dirname, '../playbooks/dist');
                 const playbooksSymlink = './dist/products/playbooks';
 
-                fs.mkdir('./dist/products', () => {
+                /* fs.mkdir('./dist/products', () => {
                     if (!fs.existsSync(boardsSymlink)) {
                         fs.symlinkSync(boardsDist, boardsSymlink, 'dir');
                     }
                     if (!fs.existsSync(playbooksSymlink)) {
                         fs.symlinkSync(playbooksDist, playbooksSymlink, 'dir');
                     }
-                });
+                }); */
             });
         },
     });
