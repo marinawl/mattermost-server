@@ -186,7 +186,13 @@ export function sendDesktopNotification(post, msgProps) {
                 url = getPermalinkURL(updatedState, teamId, post.id);
             }
 
-            dispatch(notifyMe(title, body, channel, teamId, !sound, soundName, url));
+            const sender = {
+                imgUrl: Utils.imageURLForUser(post.user_id ?? ''),
+                name: userFromPost.last_name,
+                message: msgPropsPost.message,
+            };
+
+            dispatch(notifyMe(title, body, channel, teamId, !sound, soundName, url, sender));
 
             //Don't add extra sounds on native desktop clients
             if (sound && !isDesktopApp() && !isMobileApp()) {
@@ -196,7 +202,7 @@ export function sendDesktopNotification(post, msgProps) {
     };
 }
 
-const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
+const notifyMe = (title, body, channel, teamId, silent, soundName, url, sender) => (dispatch) => {
     // handle notifications in desktop app >= 4.3.0
     if (isDesktopApp() && window.desktop && semver.gte(window.desktop.version, '4.3.0')) {
         const msg = {
@@ -205,6 +211,7 @@ const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (disp
             channel,
             teamId,
             silent,
+            sender,
         };
 
         if (isDesktopApp() && window.desktop) {
