@@ -85,7 +85,8 @@ export default class UserProfile extends PureComponent<UserProfileProps> {
 
         let name: React.ReactNode;
         if (user && displayUsername) {
-            name = `@${(user.username)}`;
+            //name = `@${(user.username)}`;
+            name = `${user.position} - ${user.first_name} ${user.last_name}`;
         } else {
             name = overwriteName || displayName || '...';
         }
