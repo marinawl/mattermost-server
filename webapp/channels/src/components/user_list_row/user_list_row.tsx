@@ -134,7 +134,7 @@ const UserListRow = ({user, status, extraInfo = [], actions = [], actionProps, a
                             hasMention={true}
                             displayUsername={true}
                         />
-                        {
+                        {/*{
                             (user.first_name || user.last_name || user.nickname) && (
                                 <>
                                     <Nbsp/>
@@ -145,7 +145,7 @@ const UserListRow = ({user, status, extraInfo = [], actions = [], actionProps, a
                                     }
                                 </>
                             )
-                        }
+                        }*/}
 
                     </div>
                     <CustomStatus>

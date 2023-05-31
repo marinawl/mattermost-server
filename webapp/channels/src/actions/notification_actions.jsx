@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import semver from 'semver';
+import {Client4} from 'mattermost-redux/client';
 
 import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
@@ -190,6 +191,7 @@ export function sendDesktopNotification(post, msgProps) {
                 imgUrl: Utils.imageURLForUser(post.user_id ?? ''),
                 name: userFromPost.last_name,
                 message: msgPropsPost.message,
+                baseUrl: Client4.getUrl(),
             };
 
             dispatch(notifyMe(title, body, channel, teamId, !sound, soundName, url, sender));

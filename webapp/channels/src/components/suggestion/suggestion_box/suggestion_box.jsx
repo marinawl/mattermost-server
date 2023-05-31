@@ -660,7 +660,7 @@ export default class SuggestionBox extends React.PureComponent {
         }
 
         const terms = suggestions.terms;
-        const items = suggestions.items;
+        let items = suggestions.items;
         let selection = this.state.selection;
         const selectionIndex = terms.indexOf(selection);
         if (selectionIndex !== this.state.selectionIndex) {
@@ -670,6 +670,11 @@ export default class SuggestionBox extends React.PureComponent {
                 selection = '';
             }
         }
+
+        // 안 쓰는 명령어 일부 숨김처리
+        const hideItems = ['/invite_people', '/playbook'];
+
+        items = items.filter((item) => !hideItems.includes(item.Suggestion));
 
         this.setState({
             cleared: false,
