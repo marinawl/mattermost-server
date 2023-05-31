@@ -316,7 +316,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
     return (
         <CompassThemeProvider theme={theme}>
             <CompletedAnimation completed={showAnimation}/>
-            <Button
+            {/*<Button
                 onClick={toggleTaskList}
                 ref={trigger}
                 open={open}
@@ -324,7 +324,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             >
                 {open ? <CloseIcon size={20}/> : <PlaylistCheckIcon size={20}/>}
                 {itemsLeft !== 0 && (<span>{itemsLeft}</span>)}
-            </Button>
+            </Button>*/}
             <TaskListPopover
                 isVisible={open}
                 trigger={trigger}
