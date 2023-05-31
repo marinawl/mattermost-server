@@ -93,6 +93,7 @@ import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {CommandModal} from "../command_modal/command_modal_route";
 
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
@@ -321,7 +322,7 @@ export default class Root extends React.PureComponent<Props, State> {
             landing = desktopAppDownloadLink;
         }
 
-        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !this.props.location.pathname.includes('/command') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
             this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
             BrowserStore.setLandingPageSeen(true);
         }
@@ -549,6 +550,10 @@ export default class Root extends React.PureComponent<Props, State> {
                     <Route
                         path={'/error'}
                         component={ErrorPage}
+                    />
+                    <Route
+                        path={'/command'}
+                        component={CommandModal}
                     />
                     <HFRoute
                         path={'/login'}
