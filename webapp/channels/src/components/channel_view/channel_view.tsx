@@ -13,6 +13,8 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import AdvancedCreatePost from 'components/advanced_create_post';
 
 import type {PropsFromRedux} from './index';
+import {getPinnedPostsForILS} from "../../actions/views/rhs";
+import ChannelTopFixNoticeILS from "../channel_top_fix_notice_ils";
 
 export type Props = PropsFromRedux & RouteComponentProps<{
     postid?: string;
@@ -169,6 +171,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 <ChannelHeader
                     {...this.props}
                 />
+                <ChannelTopFixNoticeILS />
                 <DeferredPostView
                     channelId={this.props.channelId}
                     focusedPostId={this.state.focusedPostId}

@@ -560,7 +560,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         />
                     }
                 </ChannelPermissionGate>
-                {Boolean(
+                {/*{Boolean(
                     !isSystemMessage &&
                         this.props.isCollapsedThreadsEnabled &&
                         (
@@ -577,7 +577,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         leadingElement={isFollowingThread ? <MessageMinusOutlineIcon size={18}/> : <MessageCheckOutlineIcon size={18}/>}
                         onClick={this.handleSetThreadFollow}
                     />
-                }
+                }*/}
                 {Boolean(!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH) &&
                     <Menu.Item
                         id={`unread_post_${this.props.post.id}`}

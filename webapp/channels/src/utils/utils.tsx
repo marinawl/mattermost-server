@@ -1058,6 +1058,31 @@ export function displayEntireNameForUser(user: UserProfile): React.ReactNode {
 }
 
 /**
+ * Gets the entire name, including username, full name, and nickname, of the specified user
+ */
+export function displayEntireNameForUserByILS(user: UserProfile): React.ReactNode {
+    if (!user) {
+        return '';
+    }
+
+    let displayName: React.ReactNode = '';
+    const fullName = getFullName(user);
+
+    if (fullName) {
+        displayName = ' - ' + fullName;
+    }
+
+    displayName = (
+        <span id={'displayedUserName' + user.username}>
+            {user?.position}
+            <span className='light'>{displayName}</span>
+        </span>
+    );
+
+    return displayName;
+}
+
+/**
  * Gets the full name and nickname of the specified user
  */
 export function displayFullAndNicknameForUser(user: UserProfile) {

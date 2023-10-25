@@ -18,7 +18,7 @@ import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 
 import ProfilePicture from 'components/profile_picture';
 
-import {displayEntireNameForUser} from 'utils/utils';
+import {displayEntireNameForUser, displayEntireNameForUserByILS} from 'utils/utils';
 
 type Props = {
     currentUserId: string;
@@ -35,7 +35,7 @@ export default function UserDetails(props: Props): JSX.Element {
         last_picture_update: lastPictureUpdate,
     } = option;
 
-    const displayName = displayEntireNameForUser(option);
+    const displayName = displayEntireNameForUserByILS(option);
 
     let modalName: React.ReactNode = displayName;
     if (option.id === currentUserId) {
