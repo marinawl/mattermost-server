@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/v8/channels/store"
 )
 
 var searchPostStoreTests = []searchTest{
@@ -288,7 +288,7 @@ func TestSearchPostStore(t *testing.T, s store.Store, testEngine *SearchTestEngi
 }
 
 func testSearchPostsIncludingDMs(t *testing.T, th *SearchTestHelper) {
-	direct, err := th.createDirectChannel(th.Team.Id, "direct", "direct", []*model.User{th.User, th.User2})
+	direct, err := th.createDirectChannel(th.Team.Id, "direct", []*model.User{th.User, th.User2})
 	require.NoError(t, err)
 	defer th.deleteChannel(direct)
 
@@ -310,7 +310,7 @@ func testSearchPostsIncludingDMs(t *testing.T, th *SearchTestHelper) {
 }
 
 func testSearchPostsWithPagination(t *testing.T, th *SearchTestHelper) {
-	direct, err := th.createDirectChannel(th.Team.Id, "direct", "direct", []*model.User{th.User, th.User2})
+	direct, err := th.createDirectChannel(th.Team.Id, "direct", []*model.User{th.User, th.User2})
 	require.NoError(t, err)
 	defer th.deleteChannel(direct)
 
@@ -675,7 +675,7 @@ func testSearchOrExcludePostsInChannel(t *testing.T, th *SearchTestHelper) {
 }
 
 func testSearchOrExcludePostsInDMGM(t *testing.T, th *SearchTestHelper) {
-	direct, err := th.createDirectChannel(th.Team.Id, "direct", "direct", []*model.User{th.User, th.User2})
+	direct, err := th.createDirectChannel(th.Team.Id, "direct", []*model.User{th.User, th.User2})
 	require.NoError(t, err)
 	defer th.deleteChannel(direct)
 
@@ -1767,7 +1767,6 @@ func testSupportWildcardOutsideQuotes(t *testing.T, th *SearchTestHelper) {
 		require.Len(t, results.Posts, 1)
 		th.checkPostInSearchResults(t, p2.Id, results.Posts)
 	})
-
 }
 
 func testHashtagSearchShouldSupportThreeOrMoreCharacters(t *testing.T, th *SearchTestHelper) {

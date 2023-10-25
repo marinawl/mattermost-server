@@ -16,13 +16,14 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store"
-	storemocks "github.com/mattermost/mattermost-server/server/v8/channels/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/server/v8/channels/utils/fileutils"
-	eMocks "github.com/mattermost/mattermost-server/server/v8/einterfaces/mocks"
-	"github.com/mattermost/mattermost-server/server/v8/platform/services/searchengine/mocks"
-	filesStoreMocks "github.com/mattermost/mattermost-server/server/v8/platform/shared/filestore/mocks"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/public/shared/request"
+	"github.com/mattermost/mattermost/server/v8/channels/store"
+	storemocks "github.com/mattermost/mattermost/server/v8/channels/store/storetest/mocks"
+	"github.com/mattermost/mattermost/server/v8/channels/utils/fileutils"
+	eMocks "github.com/mattermost/mattermost/server/v8/einterfaces/mocks"
+	"github.com/mattermost/mattermost/server/v8/platform/services/searchengine/mocks"
+	filesStoreMocks "github.com/mattermost/mattermost/server/v8/platform/shared/filestore/mocks"
 )
 
 func TestGeneratePublicLinkHash(t *testing.T) {
@@ -403,7 +404,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 
 		page := 0
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		require.NotNil(t, results)
@@ -424,7 +425,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 
 		page := 1
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		require.NotNil(t, results)
@@ -454,7 +455,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 			th.App.Srv().Platform().SearchEngine.ElasticsearchEngine = nil
 		}()
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		require.NotNil(t, results)
@@ -482,7 +483,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 			th.App.Srv().Platform().SearchEngine.ElasticsearchEngine = nil
 		}()
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		require.NotNil(t, results)
@@ -507,7 +508,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 			th.App.Srv().Platform().SearchEngine.ElasticsearchEngine = nil
 		}()
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		require.NotNil(t, results)
@@ -540,7 +541,7 @@ func TestSearchFilesInTeamForUser(t *testing.T) {
 			th.App.Srv().Platform().SearchEngine.ElasticsearchEngine = nil
 		}()
 
-		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage, model.ModifierFiles)
+		results, err := th.App.SearchFilesInTeamForUser(th.Context, searchTerm, th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, page, perPage)
 
 		require.Nil(t, err)
 		assert.Equal(t, []string{}, results.Order)
@@ -555,7 +556,7 @@ func TestExtractContentFromFileInfo(t *testing.T) {
 	}
 
 	// Test that we don't process images.
-	require.NoError(t, app.ExtractContentFromFileInfo(fi))
+	require.NoError(t, app.ExtractContentFromFileInfo(request.TestContext(t), fi))
 }
 
 func TestGetLastAccessibleFileTime(t *testing.T) {
@@ -647,6 +648,32 @@ func TestComputeLastAccessibleFileTime(t *testing.T) {
 
 		mockSystemStore.AssertNotCalled(t, "SaveOrUpdate", mock.Anything)
 		mockSystemStore.AssertCalled(t, "PermanentDeleteByName", mock.Anything)
-
 	})
+}
+
+func TestSetFileSearchableContent(t *testing.T) {
+	th := Setup(t).InitBasic()
+	defer th.TearDown()
+
+	fileInfo, err := th.App.Srv().Store().FileInfo().Save(&model.FileInfo{
+		CreatorId: th.BasicUser.Id,
+		PostId:    th.BasicPost.Id,
+		ChannelId: th.BasicPost.ChannelId,
+		Name:      "test",
+		Path:      "test",
+		Extension: "jpg",
+		MimeType:  "image/jpeg",
+	})
+	require.NoError(t, err)
+
+	result, appErr := th.App.SearchFilesInTeamForUser(th.Context, "searchable", th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, 0, 60)
+	require.Nil(t, appErr)
+	assert.Equal(t, 0, len(result.Order))
+
+	appErr = th.App.SetFileSearchableContent(fileInfo.Id, "searchable")
+	require.Nil(t, appErr)
+
+	result, appErr = th.App.SearchFilesInTeamForUser(th.Context, "searchable", th.BasicUser.Id, th.BasicTeam.Id, false, false, 0, 0, 60)
+	require.Nil(t, appErr)
+	assert.Equal(t, 1, len(result.Order))
 }

@@ -17,11 +17,11 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/public/shared/i18n"
-	platform_mocks "github.com/mattermost/mattermost-server/server/v8/channels/app/platform/mocks"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/server/v8/channels/testlib"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/public/shared/i18n"
+	platform_mocks "github.com/mattermost/mattermost/server/v8/channels/app/platform/mocks"
+	"github.com/mattermost/mattermost/server/v8/channels/store/storetest/mocks"
+	"github.com/mattermost/mattermost/server/v8/channels/testlib"
 )
 
 func dummyWebsocketHandler(t *testing.T) http.HandlerFunc {
@@ -64,7 +64,7 @@ func TestHubStopWithMultipleConnections(t *testing.T) {
 	s := httptest.NewServer(dummyWebsocketHandler(t))
 	defer s.Close()
 
-	session, err := th.Service.CreateSession(&model.Session{
+	session, err := th.Service.CreateSession(th.Context, &model.Session{
 		UserId: th.BasicUser.Id,
 	})
 	require.NoError(t, err)
@@ -88,7 +88,7 @@ func TestHubStopRaceCondition(t *testing.T) {
 	// So we just use this quick hack for the test.
 	s := httptest.NewServer(dummyWebsocketHandler(t))
 
-	session, err := th.Service.CreateSession(&model.Session{
+	session, err := th.Service.CreateSession(th.Context, &model.Session{
 		UserId: th.BasicUser.Id,
 	})
 	require.NoError(t, err)
@@ -153,8 +153,8 @@ func TestHubSessionRevokeRace(t *testing.T) {
 
 	mockSessionStore := mocks.SessionStore{}
 	mockSessionStore.On("UpdateLastActivityAt", "id1", mock.Anything).Return(nil)
-	mockSessionStore.On("Save", mock.AnythingOfType("*model.Session")).Return(sess1, nil)
-	mockSessionStore.On("Get", mock.Anything, "id1").Return(sess1, nil)
+	mockSessionStore.On("Save", mock.AnythingOfType("*request.Context"), mock.AnythingOfType("*model.Session")).Return(sess1, nil)
+	mockSessionStore.On("Get", mock.AnythingOfType("*request.Context"), mock.Anything, "id1").Return(sess1, nil)
 	mockSessionStore.On("Remove", "id1").Return(nil)
 
 	mockStatusStore := mocks.StatusStore{}
@@ -179,7 +179,7 @@ func TestHubSessionRevokeRace(t *testing.T) {
 	s := httptest.NewServer(dummyWebsocketHandler(t))
 	defer s.Close()
 
-	session, err := th.Service.CreateSession(&model.Session{
+	session, err := th.Service.CreateSession(th.Context, &model.Session{
 		UserId: "testid",
 	})
 	require.NoError(t, err)
@@ -379,8 +379,8 @@ func TestHubConnIndexInactive(t *testing.T) {
 	wc1 := &WebConn{
 		Platform: th.Service,
 		UserId:   model.NewId(),
-		active:   true,
 	}
+	wc1.active.Store(true)
 	wc1.SetConnectionID("conn1")
 	wc1.SetSession(&model.Session{})
 
@@ -388,16 +388,16 @@ func TestHubConnIndexInactive(t *testing.T) {
 	wc2 := &WebConn{
 		Platform: th.Service,
 		UserId:   model.NewId(),
-		active:   true,
 	}
+	wc2.active.Store(true)
 	wc2.SetConnectionID("conn2")
 	wc2.SetSession(&model.Session{})
 
 	wc3 := &WebConn{
 		Platform: th.Service,
 		UserId:   wc2.UserId,
-		active:   false,
 	}
+	wc3.active.Store(false)
 	wc3.SetConnectionID("conn3")
 	wc3.SetSession(&model.Session{})
 
@@ -464,7 +464,7 @@ func TestHubIsRegistered(t *testing.T) {
 	th := Setup(t).InitBasic()
 	defer th.TearDown()
 
-	session, err := th.Service.CreateSession(&model.Session{
+	session, err := th.Service.CreateSession(th.Context, &model.Session{
 		UserId: th.BasicUser.Id,
 	})
 	require.NoError(t, err)
@@ -484,11 +484,11 @@ func TestHubIsRegistered(t *testing.T) {
 	defer wc2.Close()
 	defer wc3.Close()
 
-	assert.True(t, th.Service.SessionIsRegistered(*wc1.session.Load().(*model.Session)))
-	assert.True(t, th.Service.SessionIsRegistered(*wc2.session.Load().(*model.Session)))
-	assert.True(t, th.Service.SessionIsRegistered(*wc3.session.Load().(*model.Session)))
+	assert.True(t, th.Service.SessionIsRegistered(*wc1.session.Load()))
+	assert.True(t, th.Service.SessionIsRegistered(*wc2.session.Load()))
+	assert.True(t, th.Service.SessionIsRegistered(*wc3.session.Load()))
 
-	session4, err := th.Service.CreateSession(&model.Session{
+	session4, err := th.Service.CreateSession(th.Context, &model.Session{
 		UserId: th.BasicUser2.Id,
 	})
 	require.NoError(t, err)

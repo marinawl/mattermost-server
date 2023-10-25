@@ -6,10 +6,9 @@ package model
 type ChannelList []*Channel
 
 func (o *ChannelList) Etag() string {
-
 	id := "0"
-	var t int64 = 0
-	var delta int64 = 0
+	var t int64
+	var delta int64
 
 	for _, v := range *o {
 		if v.LastPostAt > t {
@@ -21,7 +20,6 @@ func (o *ChannelList) Etag() string {
 			t = v.UpdateAt
 			id = v.Id
 		}
-
 	}
 
 	return Etag(id, t, delta, len(*o))
@@ -30,10 +28,9 @@ func (o *ChannelList) Etag() string {
 type ChannelListWithTeamData []*ChannelWithTeamData
 
 func (o *ChannelListWithTeamData) Etag() string {
-
 	id := "0"
-	var t int64 = 0
-	var delta int64 = 0
+	var t int64
+	var delta int64
 
 	for _, v := range *o {
 		if v.LastPostAt > t {

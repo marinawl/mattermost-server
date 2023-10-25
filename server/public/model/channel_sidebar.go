@@ -5,7 +5,6 @@ package model
 
 import (
 	"encoding/json"
-	"errors"
 	"regexp"
 )
 
@@ -13,12 +12,11 @@ type SidebarCategoryType string
 type SidebarCategorySorting string
 
 const (
-	// Each sidebar category has a 'type'. System categories are Channels, Favorites, DMs and Apps
+	// Each sidebar category has a 'type'. System categories are Channels, Favorites and DMs
 	// All user-created categories will have type Custom
 	SidebarCategoryChannels       SidebarCategoryType = "channels"
 	SidebarCategoryDirectMessages SidebarCategoryType = "direct_messages"
 	SidebarCategoryFavorites      SidebarCategoryType = "favorites"
-	SidebarCategoryApps           SidebarCategoryType = "apps"
 	SidebarCategoryCustom         SidebarCategoryType = "custom"
 	// Increment to use when adding/reordering things in the sidebar
 	MinimalSidebarSortDistance = 10
@@ -26,7 +24,6 @@ const (
 	DefaultSidebarSortOrderFavorites = 0
 	DefaultSidebarSortOrderChannels  = DefaultSidebarSortOrderFavorites + MinimalSidebarSortDistance
 	DefaultSidebarSortOrderDMs       = DefaultSidebarSortOrderChannels + MinimalSidebarSortDistance
-	DefaultSidebarSortOrderApps      = DefaultSidebarSortOrderDMs + MinimalSidebarSortDistance
 	// Sorting modes
 	// default for all categories except DMs (behaves like manual)
 	SidebarCategorySortDefault SidebarCategorySorting = ""
@@ -37,13 +34,6 @@ const (
 	// sort by display name alphabetically
 	SidebarCategorySortAlphabetical SidebarCategorySorting = "alpha"
 )
-
-var SystemSidebarCategories = []SidebarCategoryType{
-	SidebarCategoryChannels,
-	SidebarCategoryDirectMessages,
-	SidebarCategoryFavorites,
-	SidebarCategoryApps,
-}
 
 // SidebarCategory represents the corresponding DB table
 type SidebarCategory struct {
@@ -86,7 +76,7 @@ type SidebarChannel struct {
 type SidebarChannels []*SidebarChannel
 type SidebarCategoriesWithChannels []*SidebarCategoryWithChannels
 
-var categoryIdPattern = regexp.MustCompile("(favorites|channels|direct_messages|apps)_[a-z0-9]{26}_[a-z0-9]{26}")
+var categoryIdPattern = regexp.MustCompile("(favorites|channels|direct_messages)_[a-z0-9]{26}_[a-z0-9]{26}")
 
 func IsValidCategoryId(s string) bool {
 	// Category IDs can either be regular IDs
@@ -98,42 +88,10 @@ func IsValidCategoryId(s string) bool {
 	return categoryIdPattern.MatchString(s)
 }
 
-func (SidebarCategoryType) ImplementsGraphQLType(name string) bool {
-	return name == "SidebarCategoryType"
-}
-
 func (t SidebarCategoryType) MarshalJSON() ([]byte, error) {
 	return json.Marshal(string(t))
 }
 
-func (t *SidebarCategoryType) UnmarshalGraphQL(input any) error {
-	chType, ok := input.(string)
-	if !ok {
-		return errors.New("wrong type")
-	}
-
-	*t = SidebarCategoryType(chType)
-	return nil
-}
-
-func (SidebarCategorySorting) ImplementsGraphQLType(name string) bool {
-	return name == "SidebarCategorySorting"
-}
-
 func (t SidebarCategorySorting) MarshalJSON() ([]byte, error) {
 	return json.Marshal(string(t))
-}
-
-func (t *SidebarCategorySorting) UnmarshalGraphQL(input any) error {
-	chType, ok := input.(string)
-	if !ok {
-		return errors.New("wrong type")
-	}
-
-	*t = SidebarCategorySorting(chType)
-	return nil
-}
-
-func (t *SidebarCategory) SortOrder_() float64 {
-	return float64(t.SortOrder)
 }

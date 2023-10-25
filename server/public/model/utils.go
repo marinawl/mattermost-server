@@ -25,7 +25,7 @@ import (
 	"github.com/pborman/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/server/public/shared/i18n"
+	"github.com/mattermost/mattermost/server/public/shared/i18n"
 )
 
 const (
@@ -82,13 +82,11 @@ func (sa StringArray) Contains(input string) bool {
 	return false
 }
 func (sa StringArray) Equals(input StringArray) bool {
-
 	if len(sa) != len(input) {
 		return false
 	}
 
 	for index := range sa {
-
 		if sa[index] != input[index] {
 			return false
 		}
@@ -179,22 +177,8 @@ func (m StringMap) Value() (driver.Value, error) {
 	return string(buf), nil
 }
 
-func (StringMap) ImplementsGraphQLType(name string) bool {
-	return name == "StringMap"
-}
-
 func (m StringMap) MarshalJSON() ([]byte, error) {
 	return json.Marshal((map[string]string)(m))
-}
-
-func (m *StringMap) UnmarshalGraphQL(input any) error {
-	json, ok := input.(map[string]string)
-	if !ok {
-		return errors.New("wrong type")
-	}
-
-	*m = json
-	return nil
 }
 
 func (si *StringInterface) Scan(value any) error {
@@ -230,22 +214,8 @@ func (si StringInterface) Value() (driver.Value, error) {
 	return string(j), err
 }
 
-func (StringInterface) ImplementsGraphQLType(name string) bool {
-	return name == "StringInterface"
-}
-
 func (si StringInterface) MarshalJSON() ([]byte, error) {
 	return json.Marshal((map[string]any)(si))
-}
-
-func (si *StringInterface) UnmarshalGraphQL(input any) error {
-	json, ok := input.(map[string]any)
-	if !ok {
-		return errors.New("wrong type")
-	}
-
-	*si = json
-	return nil
 }
 
 var translateFunc i18n.TranslateFunc
@@ -258,15 +228,16 @@ func AppErrorInit(t i18n.TranslateFunc) {
 }
 
 type AppError struct {
-	Id            string `json:"id"`
-	Message       string `json:"message"`               // Message to be display to the end user without debugging information
-	DetailedError string `json:"detailed_error"`        // Internal error string to help the developer
-	RequestId     string `json:"request_id,omitempty"`  // The RequestId that's also set in the header
-	StatusCode    int    `json:"status_code,omitempty"` // The http status code
-	Where         string `json:"-"`                     // The function where it happened in the form of Struct.Func
-	IsOAuth       bool   `json:"is_oauth,omitempty"`    // Whether the error is OAuth specific
-	params        map[string]any
-	wrapped       error
+	Id              string `json:"id"`
+	Message         string `json:"message"`               // Message to be display to the end user without debugging information
+	DetailedError   string `json:"detailed_error"`        // Internal error string to help the developer
+	RequestId       string `json:"request_id,omitempty"`  // The RequestId that's also set in the header
+	StatusCode      int    `json:"status_code,omitempty"` // The http status code
+	Where           string `json:"-"`                     // The function where it happened in the form of Struct.Func
+	IsOAuth         bool   `json:"is_oauth,omitempty"`    // Whether the error is OAuth specific
+	SkipTranslation bool   `json:"-"`                     // Whether translation for the error should be skipped.
+	params          map[string]any
+	wrapped         error
 }
 
 const maxErrorLength = 1024
@@ -304,6 +275,10 @@ func (er *AppError) Error() string {
 }
 
 func (er *AppError) Translate(T i18n.TranslateFunc) {
+	if er.SkipTranslation {
+		return
+	}
+
 	if T == nil {
 		er.Message = er.Id
 		return
@@ -581,7 +556,6 @@ func GetServerIPAddress(iface string) string {
 	}
 
 	for _, addr := range addrs {
-
 		if ip, ok := addr.(*net.IPNet); ok && !ip.IP.IsLoopback() && !ip.IP.IsLinkLocalUnicast() && !ip.IP.IsLinkLocalMulticast() {
 			if ip.IP.To4() != nil {
 				return ip.IP.String()
@@ -659,7 +633,6 @@ func IsValidAlphaNumHyphenUnderscorePlus(s string) bool {
 }
 
 func Etag(parts ...any) string {
-
 	etag := CurrentVersion
 
 	for _, part := range parts {

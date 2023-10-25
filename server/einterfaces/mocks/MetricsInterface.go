@@ -8,7 +8,7 @@ import (
 	logr "github.com/mattermost/logr/v2"
 	mock "github.com/stretchr/testify/mock"
 
-	model "github.com/mattermost/mattermost-server/server/public/model"
+	model "github.com/mattermost/mattermost/server/public/model"
 
 	sql "database/sql"
 )
@@ -239,9 +239,9 @@ func (_m *MetricsInterface) IncrementWebsocketReconnectEvent(eventType string) {
 	_m.Called(eventType)
 }
 
-// ObserveAPIEndpointDuration provides a mock function with given fields: endpoint, method, statusCode, elapsed
-func (_m *MetricsInterface) ObserveAPIEndpointDuration(endpoint string, method string, statusCode string, elapsed float64) {
-	_m.Called(endpoint, method, statusCode, elapsed)
+// ObserveAPIEndpointDuration provides a mock function with given fields: endpoint, method, statusCode, originClient, pageLoadContext, elapsed
+func (_m *MetricsInterface) ObserveAPIEndpointDuration(endpoint string, method string, statusCode string, originClient string, pageLoadContext string, elapsed float64) {
+	_m.Called(endpoint, method, statusCode, originClient, pageLoadContext, elapsed)
 }
 
 // ObserveClusterRequestDuration provides a mock function with given fields: elapsed

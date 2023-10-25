@@ -14,10 +14,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/public/shared/mlog"
-	"github.com/mattermost/mattermost-server/server/v8/channels/app/imports"
-	"github.com/mattermost/mattermost-server/server/v8/channels/app/request"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/public/shared/mlog"
+	"github.com/mattermost/mattermost/server/public/shared/request"
+	"github.com/mattermost/mattermost/server/v8/channels/app/imports"
 )
 
 type ReactionImportData = imports.ReactionImportData // part of the app interface
@@ -268,7 +268,7 @@ func (a *App) bulkImport(c request.CTX, jsonlReader io.Reader, attachmentsReader
 			linesChan = make(chan imports.LineImportWorkerData, workers)
 			for i := 0; i < workers; i++ {
 				wg.Add(1)
-				go a.bulkImportWorker(c, dryRun, &wg, linesChan, errorsChan)
+				go a.bulkImportWorker(c.Clone(), dryRun, &wg, linesChan, errorsChan)
 			}
 		}
 

@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   mysql:
-    image: public.ecr.aws/mattermostqa/mysql:5.7.12
+    image: mattermostdevelopment/mirrored-mysql:5.7.12
     restart: always
     environment:
       MYSQL_ROOT_HOST: "%"
@@ -29,3 +29,8 @@ services:
     command: mysql:3306
     networks:
       default:
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}
+    external: true

@@ -4,9 +4,7 @@
 package api4
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -21,23 +19,22 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	graphql "github.com/graph-gophers/graphql-go"
 	s3 "github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/stretchr/testify/require"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/public/plugin/plugintest/mock"
-	"github.com/mattermost/mattermost-server/server/public/shared/mlog"
-	"github.com/mattermost/mattermost-server/server/v8/channels/app"
-	"github.com/mattermost/mattermost-server/server/v8/channels/app/request"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store/storetest/mocks"
-	"github.com/mattermost/mattermost-server/server/v8/channels/testlib"
-	"github.com/mattermost/mattermost-server/server/v8/channels/web"
-	"github.com/mattermost/mattermost-server/server/v8/channels/wsapi"
-	"github.com/mattermost/mattermost-server/server/v8/config"
-	"github.com/mattermost/mattermost-server/server/v8/platform/services/searchengine"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/public/plugin/plugintest/mock"
+	"github.com/mattermost/mattermost/server/public/shared/mlog"
+	"github.com/mattermost/mattermost/server/public/shared/request"
+	"github.com/mattermost/mattermost/server/v8/channels/app"
+	"github.com/mattermost/mattermost/server/v8/channels/store"
+	"github.com/mattermost/mattermost/server/v8/channels/store/storetest/mocks"
+	"github.com/mattermost/mattermost/server/v8/channels/testlib"
+	"github.com/mattermost/mattermost/server/v8/channels/web"
+	"github.com/mattermost/mattermost/server/v8/channels/wsapi"
+	"github.com/mattermost/mattermost/server/v8/config"
+	"github.com/mattermost/mattermost/server/v8/platform/services/searchengine"
 )
 
 type TestHelper struct {
@@ -47,7 +44,6 @@ type TestHelper struct {
 
 	Context              *request.Context
 	Client               *model.Client4
-	GraphQLClient        *graphQLClient
 	BasicUser            *model.User
 	BasicUser2           *model.User
 	TeamAdminUser        *model.User
@@ -196,7 +192,6 @@ func setupTestHelper(dbStore store.Store, searchEngine *searchengine.Broker, ent
 	}
 
 	th.Client = th.CreateClient()
-	th.GraphQLClient = newGraphQLClient(fmt.Sprintf("http://localhost:%v", th.App.Srv().ListenAddr.Port))
 	th.SystemAdminClient = th.CreateClient()
 	th.SystemManagerClient = th.CreateClient()
 
@@ -289,7 +284,6 @@ func SetupConfig(tb testing.TB, updateConfig func(cfg *model.Config)) *TestHelpe
 	dbStore := mainHelper.GetStore()
 	dbStore.DropAllTables()
 	dbStore.MarkSystemRanUnitTests()
-	mainHelper.PreloadBoardsMigrationsIfNeeded()
 	searchEngine := mainHelper.GetSearchEngine()
 	th := setupTestHelper(dbStore, searchEngine, false, true, updateConfig, nil)
 	th.InitLogin()
@@ -478,7 +472,7 @@ func (th *TestHelper) InitBasic() *TestHelper {
 	th.App.AddUserToChannel(th.Context, th.BasicUser, th.BasicDeletedChannel, false)
 	th.App.AddUserToChannel(th.Context, th.BasicUser2, th.BasicDeletedChannel, false)
 	th.App.UpdateUserRoles(th.Context, th.BasicUser.Id, model.SystemUserRoleId, false)
-	th.Client.DeleteChannel(th.BasicDeletedChannel.Id)
+	th.Client.DeleteChannel(context.Background(), th.BasicDeletedChannel.Id)
 	th.LoginBasic()
 	th.Group = th.CreateGroup()
 
@@ -552,7 +546,7 @@ func (th *TestHelper) CreateBotWithClient(client *model.Client4) *model.Bot {
 		Description: "bot",
 	}
 
-	rbot, _, err := client.CreateBot(bot)
+	rbot, _, err := client.CreateBot(context.Background(), bot)
 	if err != nil {
 		panic(err)
 	}
@@ -576,7 +570,7 @@ func (th *TestHelper) CreateTeamWithClient(client *model.Client4) *model.Team {
 		Type:        model.TeamOpen,
 	}
 
-	rteam, _, err := client.CreateTeam(team)
+	rteam, _, err := client.CreateTeam(context.Background(), team)
 	if err != nil {
 		panic(err)
 	}
@@ -595,7 +589,7 @@ func (th *TestHelper) CreateUserWithClient(client *model.Client4) *model.User {
 		Password:  "Pa$$word11",
 	}
 
-	ruser, _, err := client.CreateUser(user)
+	ruser, _, err := client.CreateUser(context.Background(), user)
 	if err != nil {
 		panic(err)
 	}
@@ -696,7 +690,7 @@ func (th *TestHelper) CreateChannelWithClientAndTeam(client *model.Client4, chan
 		TeamId:      teamId,
 	}
 
-	rchannel, _, err := client.CreateChannel(channel)
+	rchannel, _, err := client.CreateChannel(context.Background(), channel)
 	if err != nil {
 		panic(err)
 	}
@@ -735,7 +729,7 @@ func (th *TestHelper) CreatePostWithFilesWithClient(client *model.Client4, chann
 		FileIds:   fileIds,
 	}
 
-	rpost, _, err := client.CreatePost(post)
+	rpost, _, err := client.CreatePost(context.Background(), post)
 	if err != nil {
 		panic(err)
 	}
@@ -750,7 +744,7 @@ func (th *TestHelper) CreatePostWithClient(client *model.Client4, channel *model
 		Message:   "message_" + id,
 	}
 
-	rpost, _, err := client.CreatePost(post)
+	rpost, _, err := client.CreatePost(context.Background(), post)
 	if err != nil {
 		panic(err)
 	}
@@ -766,7 +760,7 @@ func (th *TestHelper) CreatePinnedPostWithClient(client *model.Client4, channel 
 		IsPinned:  true,
 	}
 
-	rpost, _, err := client.CreatePost(post)
+	rpost, _, err := client.CreatePost(context.Background(), post)
 	if err != nil {
 		panic(err)
 	}
@@ -779,7 +773,7 @@ func (th *TestHelper) CreateMessagePostWithClient(client *model.Client4, channel
 		Message:   message,
 	}
 
-	rpost, _, err := client.CreatePost(post)
+	rpost, _, err := client.CreatePost(context.Background(), post)
 	if err != nil {
 		panic(err)
 	}
@@ -812,16 +806,10 @@ func (th *TestHelper) CreateDmChannel(user *model.User) *model.Channel {
 
 func (th *TestHelper) LoginBasic() {
 	th.LoginBasicWithClient(th.Client)
-	if os.Getenv("MM_FEATUREFLAGS_GRAPHQL") == "true" {
-		th.LoginBasicWithGraphQL()
-	}
 }
 
 func (th *TestHelper) LoginBasic2() {
 	th.LoginBasic2WithClient(th.Client)
-	if os.Getenv("MM_FEATUREFLAGS_GRAPHQL") == "true" {
-		th.LoginBasicWithGraphQL()
-	}
 }
 
 func (th *TestHelper) LoginTeamAdmin() {
@@ -837,42 +825,35 @@ func (th *TestHelper) LoginSystemManager() {
 }
 
 func (th *TestHelper) LoginBasicWithClient(client *model.Client4) {
-	_, _, err := client.Login(th.BasicUser.Email, th.BasicUser.Password)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func (th *TestHelper) LoginBasicWithGraphQL() {
-	_, _, err := th.GraphQLClient.login(th.BasicUser.Email, th.BasicUser.Password)
+	_, _, err := client.Login(context.Background(), th.BasicUser.Email, th.BasicUser.Password)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (th *TestHelper) LoginBasic2WithClient(client *model.Client4) {
-	_, _, err := client.Login(th.BasicUser2.Email, th.BasicUser2.Password)
+	_, _, err := client.Login(context.Background(), th.BasicUser2.Email, th.BasicUser2.Password)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (th *TestHelper) LoginTeamAdminWithClient(client *model.Client4) {
-	_, _, err := client.Login(th.TeamAdminUser.Email, th.TeamAdminUser.Password)
+	_, _, err := client.Login(context.Background(), th.TeamAdminUser.Email, th.TeamAdminUser.Password)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (th *TestHelper) LoginSystemManagerWithClient(client *model.Client4) {
-	_, _, err := client.Login(th.SystemManagerUser.Email, th.SystemManagerUser.Password)
+	_, _, err := client.Login(context.Background(), th.SystemManagerUser.Email, th.SystemManagerUser.Password)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func (th *TestHelper) LoginSystemAdminWithClient(client *model.Client4) {
-	_, _, err := client.Login(th.SystemAdminUser.Email, th.SystemAdminUser.Password)
+	_, _, err := client.Login(context.Background(), th.SystemAdminUser.Email, th.SystemAdminUser.Password)
 	if err != nil {
 		panic(err)
 	}
@@ -1176,7 +1157,7 @@ func (th *TestHelper) MakeUserChannelAdmin(user *model.User, channel *model.Chan
 }
 
 func (th *TestHelper) UpdateUserToTeamAdmin(user *model.User, team *model.Team) {
-	if tm, err := th.App.Srv().Store().Team().GetMember(context.Background(), team.Id, user.Id); err == nil {
+	if tm, err := th.App.Srv().Store().Team().GetMember(th.Context, team.Id, user.Id); err == nil {
 		tm.SchemeAdmin = true
 		if _, err = th.App.Srv().Store().Team().UpdateMember(tm); err != nil {
 			panic(err)
@@ -1187,7 +1168,7 @@ func (th *TestHelper) UpdateUserToTeamAdmin(user *model.User, team *model.Team) 
 }
 
 func (th *TestHelper) UpdateUserToNonTeamAdmin(user *model.User, team *model.Team) {
-	if tm, err := th.App.Srv().Store().Team().GetMember(context.Background(), team.Id, user.Id); err == nil {
+	if tm, err := th.App.Srv().Store().Team().GetMember(th.Context, team.Id, user.Id); err == nil {
 		tm.SchemeAdmin = false
 		if _, err = th.App.Srv().Store().Team().UpdateMember(tm); err != nil {
 			panic(err)
@@ -1301,23 +1282,4 @@ func (th *TestHelper) SetupScheme(scope string) *model.Scheme {
 		panic(err)
 	}
 	return scheme
-}
-
-func (th *TestHelper) MakeGraphQLRequest(input *graphQLInput) (*graphql.Response, error) {
-	url := fmt.Sprintf("http://localhost:%v", th.App.Srv().ListenAddr.Port) + model.APIURLSuffixV5 + "/graphql"
-
-	buf, err := json.Marshal(input)
-	if err != nil {
-		panic(err)
-	}
-
-	resp, err := th.GraphQLClient.doAPIRequest("POST", url, bytes.NewReader(buf), map[string]string{})
-	if err != nil {
-		panic(err)
-	}
-	defer closeBody(resp)
-
-	var gqlResp *graphql.Response
-	err = json.NewDecoder(resp.Body).Decode(&gqlResp)
-	return gqlResp, err
 }

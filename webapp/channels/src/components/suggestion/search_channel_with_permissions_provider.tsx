@@ -3,31 +3,38 @@
 
 import React from 'react';
 
-import {Channel} from '@mattermost/types/channels';
+import type {Channel} from '@mattermost/types/channels';
 
+import {logError} from 'mattermost-redux/actions/errors';
+import {Permissions} from 'mattermost-redux/constants';
 import {
     getChannelsInCurrentTeam,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {Permissions} from 'mattermost-redux/constants';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortChannelsByTypeAndDisplayName} from 'mattermost-redux/utils/channel_utils';
-import {logError} from 'mattermost-redux/actions/errors';
-import {ActionResult} from 'mattermost-redux/types/actions';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
+
 import {Constants} from 'utils/constants';
 
-import Provider, {ResultsCallback} from './provider';
-import {SuggestionContainer, SuggestionProps} from './suggestion';
+import Provider from './provider';
+import type {ResultsCallback} from './provider';
+import {SuggestionContainer} from './suggestion';
+import type {SuggestionProps} from './suggestion';
 
-type WrappedChannel = {
+interface WrappedChannel {
     channel: Channel;
-    name: string;
+    name: Channel['name'];
+    deactivated: boolean;
+    type: Channel['type'];
 }
+
+type ChannelSearchFunction = (teamId: string, channelPrefix: string) => Promise<ActionResult>
 
 const SearchChannelWithPermissionsSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<WrappedChannel>>((props, ref) => {
     const {item} = props;
@@ -97,9 +104,9 @@ function channelSearchSorter(wrappedA: WrappedChannel, wrappedB: WrappedChannel)
 }
 
 export default class SearchChannelWithPermissionsProvider extends Provider {
-    autocompleteChannelsForSearch: (channelId: string, userId: string) => Promise<ActionResult<Channel[]>>;
+    autocompleteChannelsForSearch: ChannelSearchFunction;
 
-    constructor(channelSearchFunc: SearchChannelWithPermissionsProvider['autocompleteChannelsForSearch']) {
+    constructor(channelSearchFunc: ChannelSearchFunction) {
         super();
         this.autocompleteChannelsForSearch = channelSearchFunc;
     }
@@ -179,7 +186,7 @@ export default class SearchChannelWithPermissionsProvider extends Provider {
             return;
         }
 
-        const completedChannels: Record<string, boolean> = {};
+        const completedChannels: Record<Channel['id'], boolean> = {};
 
         const channelFilter = this.makeChannelSearchFilter(channelPrefix);
 
@@ -187,10 +194,6 @@ export default class SearchChannelWithPermissionsProvider extends Provider {
         const viewArchivedChannels = config.ExperimentalViewArchivedChannels === 'true';
 
         for (const channel of allChannels) {
-            if (!channel) {
-                continue;
-            }
-
             if (completedChannels[channel.id]) {
                 continue;
             }
@@ -199,10 +202,7 @@ export default class SearchChannelWithPermissionsProvider extends Provider {
                 const newChannel = Object.assign({}, channel);
                 const channelIsArchived = channel.delete_at !== 0;
 
-                const wrappedChannel = {
-                    channel: newChannel,
-                    name: newChannel.name,
-                };
+                const wrappedChannel = {channel: newChannel, name: newChannel.name, deactivated: false, type: newChannel.type};
                 if (!viewArchivedChannels && channelIsArchived) {
                     continue;
                 } else if (!members[channel.id]) {

@@ -14,15 +14,14 @@ import (
 
 	rudder "github.com/rudderlabs/analytics-go"
 
-	"github.com/mattermost/mattermost-server/server/public/model"
-	"github.com/mattermost/mattermost-server/server/public/plugin"
-	"github.com/mattermost/mattermost-server/server/public/shared/mlog"
-	"github.com/mattermost/mattermost-server/server/v8/channels/product"
-	"github.com/mattermost/mattermost-server/server/v8/channels/store"
-	"github.com/mattermost/mattermost-server/server/v8/channels/utils"
-	"github.com/mattermost/mattermost-server/server/v8/platform/services/httpservice"
-	"github.com/mattermost/mattermost-server/server/v8/platform/services/marketplace"
-	"github.com/mattermost/mattermost-server/server/v8/platform/services/searchengine"
+	"github.com/mattermost/mattermost/server/public/model"
+	"github.com/mattermost/mattermost/server/public/plugin"
+	"github.com/mattermost/mattermost/server/public/shared/mlog"
+	"github.com/mattermost/mattermost/server/v8/channels/store"
+	"github.com/mattermost/mattermost/server/v8/channels/utils"
+	"github.com/mattermost/mattermost/server/v8/platform/services/httpservice"
+	"github.com/mattermost/mattermost/server/v8/platform/services/marketplace"
+	"github.com/mattermost/mattermost/server/v8/platform/services/searchengine"
 )
 
 const (
@@ -31,8 +30,15 @@ const (
 	DBAccessAttempts    = 3
 	DBAccessTimeoutSecs = 10
 
-	RudderKey          = "placeholder_rudder_key"
-	RudderDataplaneURL = "placeholder_rudder_dataplane_url"
+	rudderDataplaneURL = "https://pdat.matterlytics.com"
+	rudderKeyProd      = "1aoejPqhgONMI720CsBSRWzzRQ9"
+	rudderKeyTest      = "1aoeoCDeh7OCHcbW2kseWlwUFyq"
+
+	// These are placeholders to allow the existing release pipelines to run without failing to
+	// insert the values that are now hard-coded above. Remove this once we converge on the
+	// unified delivery pipeline in GitHub.
+	_ = "placeholder_rudder_dataplane_url"
+	_ = "placeholder_rudder_key"
 
 	EnvVarInstallType = "MM_INSTALL_TYPE"
 
@@ -95,7 +101,6 @@ type ServerIface interface {
 	License() *model.License
 	GetRoleByName(context.Context, string) (*model.Role, *model.AppError)
 	GetSchemes(string, int, int) ([]*model.Scheme, *model.AppError)
-	HooksManager() *product.HooksManager
 }
 
 type TelemetryService struct {
@@ -139,7 +144,7 @@ func (ts *TelemetryService) ensureTelemetryID() error {
 	var err error
 
 	for i := 0; i < DBAccessAttempts; i++ {
-		ts.log.Info("Ensuring the telemetry ID", mlog.String("id", id))
+		ts.log.Info("Ensuring the telemetry ID..")
 		systemID := &model.System{Name: model.SystemTelemetryId, Value: id}
 		systemID, err = ts.dbStore.System().InsertIfExists(systemID)
 		if err != nil {
@@ -149,6 +154,7 @@ func (ts *TelemetryService) ensureTelemetryID() error {
 		}
 
 		ts.TelemetryID = systemID.Value
+		ts.log.Info("telemetry ID is set", mlog.String("id", ts.TelemetryID))
 		return nil
 	}
 
@@ -156,13 +162,21 @@ func (ts *TelemetryService) ensureTelemetryID() error {
 }
 
 func (ts *TelemetryService) getRudderConfig() RudderConfig {
-	if !strings.Contains(RudderKey, "placeholder") && !strings.Contains(RudderDataplaneURL, "placeholder") {
-		return RudderConfig{RudderKey, RudderDataplaneURL}
-	} else if os.Getenv("RudderKey") != "" && os.Getenv("RudderDataplaneURL") != "" {
+	// Support unit testing
+	if os.Getenv("RudderKey") != "" && os.Getenv("RudderDataplaneURL") != "" {
 		return RudderConfig{os.Getenv("RudderKey"), os.Getenv("RudderDataplaneURL")}
-	} else {
-		return RudderConfig{}
 	}
+
+	rudderKey := ""
+	switch model.GetServiceEnvironment() {
+	case model.ServiceEnvironmentProduction:
+		rudderKey = rudderKeyProd
+	case model.ServiceEnvironmentTest:
+		rudderKey = rudderKeyTest
+	case model.ServiceEnvironmentDev:
+	}
+
+	return RudderConfig{rudderKey, rudderDataplaneURL}
 }
 
 func (ts *TelemetryService) telemetryEnabled() bool {
@@ -183,7 +197,6 @@ func (ts *TelemetryService) sendDailyTelemetry(override bool) {
 		ts.trackGroups()
 		ts.trackChannelModeration()
 		ts.trackWarnMetrics()
-		ts.trackProducts()
 	}
 }
 
@@ -403,8 +416,6 @@ func (ts *TelemetryService) trackConfig() {
 		"enable_custom_emoji":                                     *cfg.ServiceSettings.EnableCustomEmoji,
 		"enable_emoji_picker":                                     *cfg.ServiceSettings.EnableEmojiPicker,
 		"enable_gif_picker":                                       *cfg.ServiceSettings.EnableGifPicker,
-		"gfycat_api_key":                                          isDefault(*cfg.ServiceSettings.GfycatAPIKey, model.ServiceSettingsDefaultGfycatAPIKey),
-		"gfycat_api_secret":                                       isDefault(*cfg.ServiceSettings.GfycatAPISecret, model.ServiceSettingsDefaultGfycatAPISecret),
 		"experimental_enable_authentication_transfer":             *cfg.ServiceSettings.ExperimentalEnableAuthenticationTransfer,
 		"enable_testing":                                          cfg.ServiceSettings.EnableTesting,
 		"enable_developer":                                        *cfg.ServiceSettings.EnableDeveloper,
@@ -765,7 +776,7 @@ func (ts *TelemetryService) trackConfig() {
 		"use_new_saml_library":                *cfg.ExperimentalSettings.UseNewSAMLLibrary,
 		"enable_shared_channels":              *cfg.ExperimentalSettings.EnableSharedChannels,
 		"enable_remote_cluster_service":       *cfg.ExperimentalSettings.EnableRemoteClusterService && cfg.FeatureFlags.EnableRemoteClusterService,
-		"enable_app_bar":                      *cfg.ExperimentalSettings.EnableAppBar,
+		"enable_app_bar":                      !*cfg.ExperimentalSettings.DisableAppBar,
 		"disable_refetching_on_browser_focus": *cfg.ExperimentalSettings.DisableRefetchingOnBrowserFocus,
 		"delay_channel_autocomplete":          *cfg.ExperimentalSettings.DelayChannelAutocomplete,
 	})
@@ -813,12 +824,12 @@ func (ts *TelemetryService) trackConfig() {
 	ts.SendTelemetry(TrackConfigDataRetention, map[string]any{
 		"enable_message_deletion":       *cfg.DataRetentionSettings.EnableMessageDeletion,
 		"enable_file_deletion":          *cfg.DataRetentionSettings.EnableFileDeletion,
-		"enable_boards_deletion":        *cfg.DataRetentionSettings.EnableBoardsDeletion,
 		"message_retention_days":        *cfg.DataRetentionSettings.MessageRetentionDays,
 		"file_retention_days":           *cfg.DataRetentionSettings.FileRetentionDays,
-		"boards_retention_days":         *cfg.DataRetentionSettings.BoardsRetentionDays,
 		"deletion_job_start_time":       *cfg.DataRetentionSettings.DeletionJobStartTime,
 		"batch_size":                    *cfg.DataRetentionSettings.BatchSize,
+		"time_between_batches":          *cfg.DataRetentionSettings.TimeBetweenBatchesMilliseconds,
+		"retention_ids_batch_size":      *cfg.DataRetentionSettings.RetentionIdsBatchSize,
 		"cleanup_jobs_threshold_days":   *cfg.JobSettings.CleanupJobsThresholdDays,
 		"cleanup_config_threshold_days": *cfg.JobSettings.CleanupConfigThresholdDays,
 	})
@@ -840,10 +851,12 @@ func (ts *TelemetryService) trackConfig() {
 	ts.SendTelemetry(TrackConfigDisplay, map[string]any{
 		"experimental_timezone":        *cfg.DisplaySettings.ExperimentalTimezone,
 		"isdefault_custom_url_schemes": len(cfg.DisplaySettings.CustomURLSchemes) != 0,
+		"isdefault_max_markdown_nodes": isDefault(*cfg.DisplaySettings.MaxMarkdownNodes, 0),
 	})
 
 	ts.SendTelemetry(TrackConfigGuestAccounts, map[string]any{
 		"enable":                                 *cfg.GuestAccountsSettings.Enable,
+		"hide_tag":                               *cfg.GuestAccountsSettings.HideTags,
 		"allow_email_accounts":                   *cfg.GuestAccountsSettings.AllowEmailAccounts,
 		"enforce_multifactor_authentication":     *cfg.GuestAccountsSettings.EnforceMultifactorAuthentication,
 		"isdefault_restrict_creation_to_domains": isDefault(*cfg.GuestAccountsSettings.RestrictCreationToDomains, ""),
@@ -865,10 +878,6 @@ func (ts *TelemetryService) trackConfig() {
 
 	ts.SendTelemetry(TrackConfigExport, map[string]any{
 		"retention_days": *cfg.ExportSettings.RetentionDays,
-	})
-
-	ts.SendTelemetry(TrackConfigProducts, map[string]any{
-		"enable_public_shared_boards": *cfg.ProductSettings.EnablePublicSharedBoards,
 	})
 
 	// Convert feature flags to map[string]any for sending
@@ -970,18 +979,6 @@ func (ts *TelemetryService) trackPlugins() {
 	})
 
 	pluginsEnvironment.RunMultiPluginHook(func(hooks plugin.Hooks) bool {
-		hooks.OnSendDailyTelemetry()
-		return true
-	}, plugin.OnSendDailyTelemetryID)
-}
-
-func (ts *TelemetryService) trackProducts() {
-	hm := ts.srv.HooksManager()
-	if hm == nil {
-		return
-	}
-
-	hm.RunMultiHook(func(hooks plugin.Hooks) bool {
 		hooks.OnSendDailyTelemetry()
 		return true
 	}, plugin.OnSendDailyTelemetryID)
@@ -1333,7 +1330,7 @@ func (ts *TelemetryService) initRudder(endpoint string, rudderKey string) {
 		config.Endpoint = endpoint
 		config.Verbose = ts.verbose
 		// For testing
-		if endpoint != RudderDataplaneURL {
+		if endpoint != rudderDataplaneURL {
 			config.BatchSize = 1
 		}
 		client, err := rudder.NewWithConfig(rudderKey, endpoint, config)
