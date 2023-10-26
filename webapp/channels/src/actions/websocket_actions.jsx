@@ -643,8 +643,9 @@ export function handleChannelUpdatedEvent(msg) {
         doDispatch(batchActions(actions));
 
         if (channel.id === getCurrentChannelId(state)) {
+            /* TODO: CHECK */
             // using channel's team_id to ensure we always redirect to current channel even if channel's team changes.
-            getHistory().replace(`${getRelativeTeamUrl(state, channel.team_id)}/channels/${channel.name}`);
+            // getHistory().replace(`${getRelativeTeamUrl(state, channel.team_id)}/channels/${channel.name}`);
         }
     };
 }

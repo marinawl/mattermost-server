@@ -145,6 +145,10 @@ export const getCurrentRelativeTeamUrl: (state: GlobalState) => string = createS
 
 export function getRelativeTeamUrl(state: GlobalState, teamId: string): string {
     const team = getTeam(state, teamId);
+
+    /*const teamName = state?.entities?.teams?.teams?.[state?.entities?.teams?.currentTeamId]?.name
+    return `/${team.name || teamName}`;*/
+
     return `/${team.name}`;
 }
 

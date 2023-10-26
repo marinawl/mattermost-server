@@ -31,7 +31,9 @@ export default class ChannelTopFixNoticeILS extends React.PureComponent<Props, S
     }
 
     componentDidUpdate(prevProps: Props) {
-        console.log(prevProps, this.props)
+        if(this.props.channelId !== prevProps.channelId) {
+            this.setState({ isExtend: null })
+        }
 
         if(this.props.channelId && this.props.pinnedPostsCount > 0) {
             if(!this.props.newNoticeForILS || (JSON.stringify(this.props.newNoticeForILS) !== JSON.stringify(prevProps.newNoticeForILS))) {
