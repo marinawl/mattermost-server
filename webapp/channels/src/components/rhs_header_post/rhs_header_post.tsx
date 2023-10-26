@@ -193,13 +193,13 @@ export default class RhsHeaderPost extends React.PureComponent<RhsHeaderPostProp
                     }
                 </span>
                 <div className='controls'>
-                    {this.props.isCollapsedThreadsEnabled ? (
+                    {/*{this.props.isCollapsedThreadsEnabled ? (
                         <FollowButton
                             className='sidebar--right__follow__thread'
                             isFollowing={isFollowingThread}
                             onClick={this.handleFollowChange}
                         />
-                    ) : null}
+                    ) : null}*/}
 
                     <OverlayTrigger
                         delayShow={Constants.OVERLAY_TIME_DELAY}

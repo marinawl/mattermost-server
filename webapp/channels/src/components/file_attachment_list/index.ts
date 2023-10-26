@@ -24,6 +24,7 @@ export type OwnProps = {
     post: Post;
     compactDisplay?: boolean;
     isInPermalink?: boolean;
+    notUseSingleViewILS?: boolean;
     handleFileDropdownOpened?: (open: boolean) => void;
 }
 

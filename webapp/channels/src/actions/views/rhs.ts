@@ -375,6 +375,29 @@ export function showPinnedPosts(channelId?: string) {
     };
 }
 
+export function getPinnedPostsForILS(channelId?: string) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const state = getState() as GlobalState;
+        const currentChannelId = getCurrentChannelId(state);
+
+        const results = await dispatch(getPinnedPosts(channelId || currentChannelId));
+
+        let data: any;
+        if ('data' in results) {
+            data = results.data;
+        }
+
+        dispatch(batchActions([
+            {
+                type: SearchTypes.ILS_NOTICE_POSTS,
+                data,
+            },
+        ]));
+
+        return {data: true};
+    };
+}
+
 export function showChannelFiles(channelId: string) {
     return async (dispatch: (action: Action, getState?: GetStateFunc | null) => Promise<ActionResult|[ActionResult, ActionResult]>, getState: GetStateFunc) => {
         const state = getState() as GlobalState;

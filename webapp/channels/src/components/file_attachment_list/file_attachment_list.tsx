@@ -31,6 +31,7 @@ export default function FileAttachmentList(props: Props) {
 
     const {
         compactDisplay,
+        notUseSingleViewILS,
         enableSVGs,
         fileInfos,
         fileCount,
@@ -39,7 +40,7 @@ export default function FileAttachmentList(props: Props) {
     } = props;
 
     const sortedFileInfos = useMemo(() => sortFileInfos(fileInfos ? [...fileInfos] : [], locale), [fileInfos, locale]);
-    if (fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
+    if (!notUseSingleViewILS && fileInfos && fileInfos.length === 1 && !fileInfos[0].archived) {
         const fileType = getFileType(fileInfos[0].extension);
 
         if (fileType === FileTypes.IMAGE || (fileType === FileTypes.SVG && enableSVGs)) {

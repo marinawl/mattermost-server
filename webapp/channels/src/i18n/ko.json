@@ -3748,5 +3748,7 @@
   "threading.numNewReplies": "{newReplies} 새 답장",
   "login.title": "ILS 메신저",
   "login.subtitle": "(유)일성 메신저",
-  "search_header.search": "검색"
+  "search_header.search": "검색",
+  "sidebar_left.sidebar_channel_menu.markAsRead": "안 읽음 표시",
+  "single_image_view.download_tooltip": "다운로드"
 }

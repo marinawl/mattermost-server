@@ -115,6 +115,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
+
         this.toggleFavoriteRef = React.createRef();
         this.headerDescriptionRef = React.createRef();
         this.headerPopoverTextMeasurerRef = React.createRef();
@@ -287,6 +288,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             teammateNameDisplaySetting,
             hideGuestTags,
         } = this.props;
+
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
 
