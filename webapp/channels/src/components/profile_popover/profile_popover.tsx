@@ -164,7 +164,6 @@ export interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Po
     /**
      * @internal
      */
-    enableTimezone: boolean;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
@@ -425,7 +424,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         }
 
         const keysToBeRemoved: Array<keyof ProfilePopoverProps> = ['user', 'userId', 'channelId', 'src', 'status', 'hideStatus', 'isBusy',
-            'hide', 'hasMention', 'enableTimezone', 'currentUserId', 'currentTeamId', 'teamUrl', 'actions', 'isTeamAdmin',
+            'hide', 'hasMention', 'currentUserId', 'currentTeamId', 'teamUrl', 'actions', 'isTeamAdmin',
             'isChannelAdmin', 'canManageAnyChannelMembersInCurrentTeam', 'intl'];
         const popoverProps: React.ComponentProps<typeof Popover> = Utils.deleteKeysFromObject({...this.props},
             keysToBeRemoved);
@@ -567,11 +566,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
             />,
         );
         /* Local Time 숨김처리 */
-        /*if (
-            this.props.enableTimezone &&
-            this.props.user.timezone &&
-            !haveOverrideProp
-        ) {
+        /*if (this.props.user.timezone && !haveOverrideProp) {
             dataContent.push(
                 <ProfileTimezone
                     currentUserTimezone={this.props.currentUserTimezone}
