@@ -538,7 +538,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
                 {/*
                     안 쓰는 사이드바 메뉴 숨김처리
                 */}
-                <GlobalThreadsLink/>
+                {/*<GlobalThreadsLink/>*/}
                 {/*<DraftsLink/>*/}
                 <div
                     id='sidebar-left'

@@ -15,7 +15,7 @@ import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_ic
 import Avatar from 'components/widgets/users/avatar';
 
 import {Constants, A11yCustomEventTypes} from 'utils/constants';
-import {imageURLForUser, getDisplayName, localizeMessage} from 'utils/utils';
+import {imageURLForUser, getDisplayName, localizeMessage, getDisplayNameForILS} from 'utils/utils';
 
 import MultiSelectList from './multiselect_list';
 
@@ -281,7 +281,7 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
                     url={profileImg}
                 />
                 <div className='react-select__value__name'>
-                    {getDisplayName(user)}
+                    {getDisplayNameForILS(user)}
                 </div>
             </>
         );

@@ -30,7 +30,7 @@ import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
 import {runDesktopNotificationHooks} from './hooks';
-import {Client4} from "@mattermost/client";
+import {Client4} from 'mattermost-redux/client';
 
 const NOTIFY_TEXT_MAX_LENGTH = 50;
 

@@ -228,3 +228,28 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.advanced_text_editor_ils_link {
+    display: flex;
+    gap: 12px;
+    min-width: 100px;
+    justify-content: flex-end;
+    font-size: 12px;
+    align-items: center;
+
+    span {
+        color: #3098f8;
+        cursor: pointer;
+
+        &:hover {
+            opacity: .7;
+        }
+    }
+
+    > div {
+        min-width: 1px;
+        height: 10px;
+        background-color: #afafaf;
+        margin-top: 1px;
+    }
+}

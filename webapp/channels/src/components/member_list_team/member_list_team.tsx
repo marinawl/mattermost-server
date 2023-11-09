@@ -154,14 +154,17 @@ export default class MemberListTeam extends React.PureComponent<Props, State> {
             };
         } = {};
 
+        /* Nickname 으로 정렬 추가 */
+        const sortableUsers = users?.sort((a, b) => a?.nickname?.localeCompare(b?.nickname)) || []
+
         let usersToDisplay;
         if (this.state.loading) {
             usersToDisplay = null;
         } else {
             usersToDisplay = [];
 
-            for (let i = 0; i < users.length; i++) {
-                const user = users[i];
+            for (let i = 0; i < sortableUsers.length; i++) {
+                const user = sortableUsers[i];
 
                 if (teamMembers[user.id] && user.delete_at === 0) {
                     usersToDisplay.push(user);

@@ -938,6 +938,19 @@ export function getDisplayName(user: UserProfile) {
     return user.username;
 }
 
+export function getDisplayNameForILS(user: UserProfile) {
+    // if (user.nickname && user.nickname.trim().length > 0) {
+    //     return user.nickname;
+    // }
+    const fullName = getFullName(user);
+
+    if (fullName) {
+        return fullName;
+    }
+
+    return user.username;
+}
+
 export function getLongDisplayName(user: UserProfile) {
     let displayName = '@' + user.username;
     const fullName = getFullName(user);

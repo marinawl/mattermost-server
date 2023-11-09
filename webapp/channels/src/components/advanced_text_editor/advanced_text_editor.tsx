@@ -43,6 +43,7 @@ import TexteditorActions from './texteditor_actions';
 import ToggleFormattingBar from './toggle_formatting_bar';
 
 import './advanced_text_editor.scss';
+import ExternalLink from "../external_link";
 
 type Props = {
 
@@ -515,10 +516,34 @@ const AdvanceTextEditor = ({
                         handleSubmit={handleSubmit}
                     />
                 )}
-                <MsgTyping
-                    channelId={channelId}
-                    postId={postId}
-                />
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <MsgTyping
+                        channelId={channelId}
+                        postId={postId}
+                    />
+
+                    <div className={'advanced_text_editor_ils_link'}>
+                        <span>
+                             <ExternalLink
+                                 location='textbox_links'
+                                 href={'https://is.ilscp.net/'}
+                                 className='textbox-help-link'
+                             >
+                                 포탈 시스템
+                             </ExternalLink>
+                        </span>
+                        <div />
+                        <span>
+                             <ExternalLink
+                                 location='textbox_links'
+                                 href={'https://hrm-dev.ilscp.net/auth'}
+                                 className='textbox-help-link'
+                             >
+                                 인사운영 시스템
+                             </ExternalLink>
+                        </span>
+                    </div>
+                </div>
             </div>
         </>
     );

@@ -67,6 +67,7 @@ import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
 import 'plugins/export.js';
+import {CommandModal} from "../command_modal/command_modal_route";
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLogin = React.lazy(() => import('components/login/login'));
@@ -484,6 +485,10 @@ export default class Root extends React.PureComponent<Props, State> {
                     <Route
                         path={'/error'}
                         component={ErrorPage}
+                    />
+                    <Route
+                        path={'/command'}
+                        component={CommandModal}
                     />
                     <HFRoute
                         path={'/login'}
