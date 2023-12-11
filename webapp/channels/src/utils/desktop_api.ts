@@ -6,11 +6,20 @@ import semver from 'semver';
 import type {DesktopAPI} from '@mattermost/desktop-api';
 
 import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from "./utils";
+import {Client4} from "mattermost-redux/client";
 
 declare global {
     interface Window {
         desktopAPI?: Partial<DesktopAPI>;
     }
+}
+
+interface Sender {
+    imgUrl: string,
+    name: string,
+    message: any,
+    baseUrl: string,
 }
 
 class DesktopAppAPI {
@@ -164,6 +173,7 @@ class DesktopAppAPI {
         silent: boolean,
         soundName: string,
         url: string,
+        sender: Sender
     ) => {
         if (window.desktopAPI?.sendNotification) {
             window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
@@ -182,6 +192,7 @@ class DesktopAppAPI {
                     silent,
                     data: {soundName},
                     url,
+                    sender
                 },
             },
             window.location.origin,
