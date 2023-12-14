@@ -79,7 +79,8 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                <Menu.ItemExternalLink
+                {/* Mattermost 공식 유저 가이드, Training resources 숨김 처리 */}
+                {/*<Menu.ItemExternalLink
                     id='mattermostUserGuideLink'
                     iconClassName='icon-file-text-outline'
                     url={mattermostUserGuideLink}
@@ -92,7 +93,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                         url={trainingResourcesLink}
                         text={intl.formatMessage({id: 'userGuideHelp.trainingResources', defaultMessage: 'Training resources'})}
                     />
-                )}
+                )}*/}
                 {this.props.enableAskCommunityLink === 'true' && (
                     <Menu.ItemExternalLink
                         id='askTheCommunityLink'

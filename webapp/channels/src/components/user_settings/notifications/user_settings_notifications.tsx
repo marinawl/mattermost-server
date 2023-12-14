@@ -1309,7 +1309,7 @@ class NotificationsTab extends React.PureComponent<Props, State> {
                                 defaultMessage='Notifications'
                             />
                         </h3>
-                        <FormattedMessage
+                        {/*<FormattedMessage
                             id='user.settings.notifications.learnMore'
                             defaultMessage='<a>Learn more about notifications</a>'
                             values={{
@@ -1320,7 +1320,7 @@ class NotificationsTab extends React.PureComponent<Props, State> {
                                     </ExternalLink>
                                 )),
                             }}
-                        />
+                        />*/}
                     </div>
                     <div className='divider-dark first'/>
                     <DesktopNotificationSettings

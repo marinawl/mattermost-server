@@ -230,7 +230,8 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
                         defaultMessage='Select which language Mattermost displays in the user interface.'
                     />
                     <p/>
-                    <FormattedMessage
+                    {/* 번역 도와달라는 문구 숨김처리 */}
+                    {/*<FormattedMessage
                         id='user.settings.languages.promote2'
                         defaultMessage='Would you like to help with translations? Join the <link>Mattermost Translation Server</link> to contribute.'
                         values={{
@@ -243,7 +244,7 @@ export class ManageLanguage extends React.PureComponent<Props, State> {
                                 </ExternalLink>
                             ),
                         }}
-                    />
+                    />*/}
                 </div>
             </div>
         );

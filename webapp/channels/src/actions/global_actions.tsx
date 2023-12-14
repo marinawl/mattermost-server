@@ -55,6 +55,12 @@ import {openModal} from './views/modals';
 const dispatch = store.dispatch;
 const getState = store.getState;
 
+// 로그인시 팀 못 찾는 오류 우회 변수
+const ilsTownSquare = {
+    id:'ot171pxsbtynfny3qssxkpg3jo',
+    name: 'town-square'
+}
+
 export function emitChannelClickEvent(channel: Channel) {
     function switchToChannel(chan: Channel) {
         const state = getState();
@@ -405,6 +411,10 @@ export async function redirectUserToDefaultTeam() {
         if (channel) {
             dispatch(selectChannel(channel.id));
             getHistory().push(`/${myTeam.name}/channels/${channel.name}`);
+            return;
+        } else {
+            dispatch(selectChannel(ilsTownSquare.id));
+            getHistory().push(`/${myTeam.name}/channels/${ilsTownSquare.name}`);
             return;
         }
     }
