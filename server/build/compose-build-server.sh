@@ -5,46 +5,50 @@ COMPOSE_PATH=docker-compose-server.production.yml
 # ENV
 BUILD_ENV_PATH=.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
+# ENV-DOCKER
+BUILD_ENV_DOCKER_PATH=.env.docker
+BUILD_ENV_DOCKER_VALUE=`cat ${BUILD_ENV_DOCKER_PATH}`
 
 # Docker image 현재 버전
 VERSION='0.0.1'
 
 main() {
-	echo '===== Script Start ====='
+  echo '===== Script Start ====='
 
-	echo '===== env check Start...'
-	env_to_variable "${BUILD_ENV_VALUE}"
-	echo '===== env check end...'
+  echo '===== env check Start...'
+  env_to_variable "${BUILD_ENV_VALUE}"
+  env_to_variable "${BUILD_ENV_DOCKER_VALUE}"
+  echo '===== env check end...'
 
-	echo '===== Docker Image Build Start...'
-	docker_image_build
-	echo '===== Docker Image Build End...'
+  echo '===== Docker Image Build Start...'
+  docker_image_build
+  echo '===== Docker Image Build End...'
 
-	echo '===== Docker Compose Start...'
-	docker_build
-	echo '===== Docker Compose Build End...'
+  echo '===== Docker Compose Start...'
+  docker_build
+  echo '===== Docker Compose Build End...'
 
-	echo '===== Script End ====='
+  echo '===== Script End ====='
 }
 
 # env 변수값을 전역변수로 저장
 env_to_variable()
 {
-	for env in $1; do
-		# \r 전부 제거
-		env=$(echo $env | tr -d '\r')
-		IFS="=" read -r key value <<< "$env"
+  for env in $1; do
+    # \r 전부 제거
+    env=$(echo $env | tr -d '\r')
+    IFS="=" read -r key value <<< "$env"
 
-		eval $key=$value
-	done
+    eval $key=$value
+  done
 }
 
 # 전역변수를 env 값으로 변경
 variable_to_env()
 {
   # local 에서 테스트 할 시 .backup 을 붙여야 env 값 변경 가능
-	#sed -i .backup "s/${1}/${2}/g" $3
-	sed -i "s/${1}/${2}/g" $3
+  #sed -i .backup "s/${1}/${2}/g" $3
+  sed -i "s/${1}/${2}/g" $3
 }
 
 # docker hub 에서 img pull 작업
@@ -109,18 +113,19 @@ docker_image_build() {
 # Docker image & Docekr Container 생성
 docker_build() {
   echo "===== env 버전 정보를 동기화 합니다. "
-	variable_to_env "DOCKER_IMAGE_VERSION=.*" "DOCKER_IMAGE_VERSION=${VERSION}" $BUILD_ENV_PATH
+  variable_to_env "DOCKER_IMAGE_VERSION=.*" "DOCKER_IMAGE_VERSION=${VERSION}" $BUILD_ENV_DOCKER_PATH
 
-	sleep 3
+  sleep 3
+
   # 이전 컨테이너 종료
   echo "===== ${DOCKER_CONTAINER_NM} 기존 컨테이너를 삭제 및 종료합니다. "
   docker compose -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} down
 
   sleep 3
 
-	# Docker container 생성
-	echo "===== ${DOCKER_CONTAINER_NM} 새로운 컨테이너 업로드 합니다."
-	docker compose -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
+  # Docker container 생성
+  echo "===== ${DOCKER_CONTAINER_NM} 새로운 컨테이너 업로드 합니다."
+  docker compose -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
 }
 
 #test

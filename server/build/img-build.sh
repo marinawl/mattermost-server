@@ -60,7 +60,7 @@ variable_to_env()
 #Docker image 버전 변경 & Docker compose 설정 변경
 docker_version_check() {
 	#Docekr image 버전 확인
-	if [ ! -e $BUILD_ENV_PATH ]; then
+	if [ ! -e $BUILD_ENV_DOCKER_PATH ]; then
 		echo 'Build Failed: NOT FOUND .env ...'
 
 		return 24
@@ -93,7 +93,7 @@ docker_version_check() {
 		NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 	fi
 
-	variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_PATH
+	variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_DOCKER_PATH
 
 	# ---------- 무중단 배포 용도 시작 ---------- #
 	#Docker compose type 확인

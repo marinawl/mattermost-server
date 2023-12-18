@@ -7,6 +7,8 @@ services:
       - mm-test
     ports:
       - ${DOCEKR_CONTAINER_PORT}:8065
+      - 443:443
+      - 80:80
     #  - 8443:8443/udp
     environment:
       # timezone inside container
@@ -21,6 +23,10 @@ services:
 
       # additional settings
       MM_SERVICESETTINGS_SITEURL: ${SITE_URL}
+      #MM_SERVICESETTINGS_LISTENADDRESS: ${LISTEN_ADDRESS}
+      #MM_SERVICESETTINGS_CONNECTIONSECURITY: ${CONNECTION_SECURITY}
+      #MM_SERVICESETTINGS_USELETSENCRYPT: ${USE_LETS_ENCRYPT}
+      #MM_SERVICESETTINGS_FORWARD80TO443: ${FORWARD_80_TO_443}
 networks:
   mm-test:
     driver: bridge
