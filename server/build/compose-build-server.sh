@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Docker compose 경로
-COMPOSE_PATH=docker-compose.production.yml
+COMPOSE_PATH=docker-compose-server.production.yml
 # ENV
 BUILD_ENV_PATH=.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
@@ -43,8 +43,8 @@ env_to_variable()
 variable_to_env()
 {
   # local 에서 테스트 할 시 .backup 을 붙여야 env 값 변경 가능
-	sed -i .backup "s/${1}/${2}/g" $3
-	#sed -i "s/${1}/${2}/g" $3
+	#sed -i .backup "s/${1}/${2}/g" $3
+	sed -i "s/${1}/${2}/g" $3
 }
 
 # docker hub 에서 img pull 작업

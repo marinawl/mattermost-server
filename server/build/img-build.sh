@@ -9,6 +9,9 @@ COMPOSE_PATH=$DIR/server/build/docker-compose.production.yml
 # ENV
 BUILD_ENV_PATH=.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
+# ENV-DOCKER
+BUILD_ENV_DOCKER_PATH=.env.docker
+BUILD_ENV_DOCKER_VALUE=`cat ${BUILD_ENV_DOCKER_PATH}`
 
 # Docker image 현재 버전
 VERSION='1.0.0'
@@ -25,6 +28,7 @@ main() {
 
 	echo '===== Docker version check Start...'
 	env_to_variable "${BUILD_ENV_VALUE}"
+	env_to_variable "${BUILD_ENV_DOCKER_VALUE}"
 	docker_version_check
 	echo '===== Docker version check end...'
 
@@ -89,18 +93,21 @@ docker_version_check() {
 		NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 	fi
 
-	#Docker compose type 확인
-	if [ "${DOCKER_CONTAINER_TYPE}" = "blue" ]; then
-		CONTAINER_TYPE="green"
-		CONTAINER_PORT=8061
-	else
-		CONTAINER_TYPE="blue"
-		CONTAINER_PORT=8062
-	fi
-
 	variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_PATH
-	variable_to_env "DOCKER_CONTAINER_TYPE=${DOCKER_CONTAINER_TYPE}" "DOCKER_CONTAINER_TYPE=${CONTAINER_TYPE}" $BUILD_ENV_PATH
-	variable_to_env "DOCEKR_CONTAINER_PORT=${DOCEKR_CONTAINER_PORT}" "DOCEKR_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
+
+	# ---------- 무중단 배포 용도 시작 ---------- #
+	#Docker compose type 확인
+	#if [ "${DOCKER_CONTAINER_TYPE}" = "blue" ]; then
+	#	CONTAINER_TYPE="green"
+	#	CONTAINER_PORT=8061
+	#else
+	#	CONTAINER_TYPE="blue"
+	#	CONTAINER_PORT=8062
+	#fi
+
+	#variable_to_env "DOCKER_CONTAINER_TYPE=${DOCKER_CONTAINER_TYPE}" "DOCKER_CONTAINER_TYPE=${CONTAINER_TYPE}" $BUILD_ENV_PATH
+	#variable_to_env "DOCEKR_CONTAINER_PORT=${DOCEKR_CONTAINER_PORT}" "DOCEKR_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
+	# ---------- 무중단 배포 용도 종료 ---------- #
 }
 
 # Mattermost 서버 빌드
