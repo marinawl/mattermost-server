@@ -658,7 +658,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         </Switch>
                         <Pluggable pluggableName='Global'/>
                         <SidebarRight/>
-                        <AppBar/>
+                        {/*<AppBar/>*/}
                         <SidebarRightMenu/>
                     </CompassThemeProvider>
                 </Switch>

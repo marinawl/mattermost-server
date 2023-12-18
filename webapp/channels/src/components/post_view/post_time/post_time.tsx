@@ -13,6 +13,7 @@ import Tooltip from 'components/tooltip';
 
 import {Locations} from 'utils/constants';
 import {isMobile} from 'utils/user_agent';
+import moment from "moment-timezone";
 
 const POST_TOOLTIP_RANGES = [
     RelativeRanges.TODAY_TITLE_CASE,
@@ -64,13 +65,19 @@ export default class PostTime extends React.PureComponent<Props> {
             timestampProps = {},
         } = this.props;
 
-        const postTime = (
+        /* 메시지 전송시간 포멧 변경 */
+        /*const postTime = (
             <Timestamp
                 value={eventTime}
                 className='post__time'
                 useDate={false}
                 {...timestampProps}
             />
+        );*/
+
+        const time = moment(eventTime).format('YYYY-MM-DD (dd) a hh:mm');
+        const postTime = (
+            <time style={{fontSize: '0.9em', opacity:0.6}}>{time}</time>
         );
 
         const content = isMobile() || !isPermalink ? (
@@ -101,11 +108,12 @@ export default class PostTime extends React.PureComponent<Props> {
                         id={eventTime.toString()}
                         className='hidden-xs'
                     >
-                        <Timestamp
+                        {time}
+                        {/*<Timestamp
                             value={eventTime}
                             ranges={POST_TOOLTIP_RANGES}
                             useSemanticOutput={false}
-                        />
+                        />*/}
                     </Tooltip>
                 }
             >

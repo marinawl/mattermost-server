@@ -856,7 +856,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />*/}
-                    <CallButton/>
+                    {/*<CallButton/>*/}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

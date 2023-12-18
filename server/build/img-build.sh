@@ -132,6 +132,23 @@ mattermost_build() {
 	mkdir $PACKAGE_PATH
 	cp dist/mattermost-team-linux-amd64.tar.gz $PACKAGE_PATH
 	cp config/config.json $PACKAGE_PATH
+
+	sleep 3
+
+	# server dir 접근
+	cd $DIR/server/build
+
+  # docker hub 로그인
+  echo "Docker hub 로그인 시도"
+  docker login -u ${DOCKER_HUB_ID} -p ${DOCKER_HUB_PW}
+
+  echo "Docker image build 시작"
+  docker build -t ${DOCKER_IMAGE_NM}:$NEW_VERSION .
+  echo "Docker image build 완료"
+
+  echo "Docker image push 시작"
+  docker push ${DOCKER_IMAGE_NM}:$NEW_VERSION
+  echo "Docker image push 완료"
 }
 
 main

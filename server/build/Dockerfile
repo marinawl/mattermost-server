@@ -22,6 +22,7 @@ RUN apt-get update \
   poppler-utils \
   tidy \
   tzdata \
+  libcap2-bin \
   && rm -rf /var/lib/apt/lists/*
 
 ADD ${MM_PACKAGE} /
@@ -35,7 +36,8 @@ RUN mkdir -p /mattermost/data /mattermost/plugins /mattermost/client/plugins \
   #&& if [ -n "$MM_PACKAGE" ]; then tar -xzf $MM_PACKAGE > /dev/null ; \
   #else echo "please set the MM_PACKAGE" ; exit 127 ; fi \
   && chmod -R 755 /mattermost/bin \
-  && chown -R mattermost:mattermost /mattermost /mattermost/bin /mattermost/data /mattermost/plugins /mattermost/client/plugins
+  && chown -R mattermost:mattermost /mattermost /mattermost/bin /mattermost/data /mattermost/plugins /mattermost/client/plugins \
+  && setcap cap_net_bind_service=+ep /mattermost/bin/mattermost
 
 # We should refrain from running as privileged user
 USER mattermost

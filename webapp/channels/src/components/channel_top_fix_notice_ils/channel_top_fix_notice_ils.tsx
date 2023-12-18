@@ -6,12 +6,10 @@ import {RouteComponentProps} from 'react-router-dom';
 
 import type {PropsFromRedux} from './index';
 import PostProfilePicture from "../post_profile_picture";
-import Timestamp, {RelativeRanges} from "../timestamp";
-import moment, {Moment} from 'moment-timezone';
+import moment from 'moment-timezone';
+import 'moment/locale/ko'
 import FileAttachmentListContainer from "../file_attachment_list";
 import PostUserProfile from "../post/user_profile";
-import * as PostUtils from "../../utils/post_utils";
-import IconSpeaker from 'images/icons/ils_icon_speaker_fill.svg';
 import IconCampaign from 'images/icons/ils_icon_campaign_fill.svg';
 
 export type Props = PropsFromRedux & RouteComponentProps<{
@@ -98,7 +96,7 @@ export default class ChannelTopFixNoticeILS extends React.PureComponent<Props, S
                     </div>
 
                     <div className={`channel_top_fix_notice_etc`} onClick={this.handleOnExtend.bind(this)}>
-                        <span>{moment(this.props.newNoticeForILS?.update_at).format('YYYY-MM-DD HH:mm')}</span>
+                        <span>{moment(this.props.newNoticeForILS?.update_at).format('YYYY-MM-DD a hh:mm')}</span>
 
                         <i
                             aria-hidden='true'
