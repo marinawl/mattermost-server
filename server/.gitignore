@@ -10,7 +10,7 @@ npm-debug.log
 webapp/yarn-error.log
 mattermost.mattermost-license
 config/mattermost.mattermost-license
-config/config.json
+#config/config.json
 config/*.crt
 
 web/static/js/bundle*.js
@@ -129,5 +129,5 @@ go.*.orig
 config.override.mk
 docker-compose.override.yaml
 
-build/.env
+#build/.env
 build/package
