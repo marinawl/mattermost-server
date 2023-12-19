@@ -119,13 +119,13 @@ docker_build() {
 
   # 이전 컨테이너 종료
   echo "===== ${DOCKER_CONTAINER_NM} 기존 컨테이너를 삭제 및 종료합니다. "
-  docker compose -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} down
+  docker compose --env-file .env --env-file .env.docker -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} down
 
   sleep 3
 
   # Docker container 생성
   echo "===== ${DOCKER_CONTAINER_NM} 새로운 컨테이너 업로드 합니다."
-  docker compose -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
+  docker compose --env-file .env --env-file .env.docker -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
 }
 
 #test

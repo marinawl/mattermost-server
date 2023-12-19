@@ -365,7 +365,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             return (
                 <div className='get-app__dialog-body'>
                     {this.renderDialogHeader()}
-                    {this.renderDownloadLinkSection()}
+                    {/*{this.renderDownloadLinkSection()}*/}
                 </div>
             );
         }
@@ -404,7 +404,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                         defaultMessage='Remember my preference'
                     />
                 </div>
-                {this.renderDownloadLinkSection()}
+                {/*{this.renderDownloadLinkSection()}*/}
             </div>
         );
     };

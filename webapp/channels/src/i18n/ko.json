@@ -3761,5 +3761,9 @@
   "shortcuts.msgs.comp.last_reaction.mac": "React to last message:\t⌘|Shift|⧵",
   "shortcuts.msgs.search_channel": "채널에서:\tCtrl|F",
   "shortcuts.msgs.search_channel.mac": "채널에서:\t⌘|F",
-  "shortcuts.msgs.search.header": "검색"
+  "shortcuts.msgs.search.header": "검색",
+  "get_app.launching": "어디서 보시겠습니까 ?",
+  "get_app.rememberMyPreference": "항상 선택한 보기 사용",
+  "get_app.ifNothingPrompts": "데스크톱 앱에서 메신저를 보거나 웹 브라우저에서 계속 볼 수 있습니다.",
+  "get_app.ifNothingPromptsMobile": "모바일 앱에서 메신저를 보거나 웹 브라우저에서 계속 볼 수 있습니다."
 }

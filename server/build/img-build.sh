@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # 스크립트 폴더위치
-DIR=../..
+SH_DIR="$(dirname $(realpath $0))"
+# 프로젝트 폴더위치
+DIR=${SH_DIR%/*/*}
 # 빌드용 tar, config 파일이 들어있는 폴더 위치
-PACKAGE_PATH=build/package
-# Docker compose 경로
-COMPOSE_PATH=$DIR/server/build/docker-compose.production.yml
+PACKAGE_PATH=$SH_DIR/package
 # ENV
-BUILD_ENV_PATH=.env
+BUILD_ENV_PATH=$SH_DIR/.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
 # ENV-DOCKER
-BUILD_ENV_DOCKER_PATH=.env.docker
+BUILD_ENV_DOCKER_PATH=$SH_DIR/.env.docker
 BUILD_ENV_DOCKER_VALUE=`cat ${BUILD_ENV_DOCKER_PATH}`
 
 # Docker image 현재 버전
@@ -25,10 +25,9 @@ CONTAINER_PORT=''
 
 main() {
 	echo '===== Script Start ====='
-
 	echo '===== Docker version check Start...'
 	env_to_variable "${BUILD_ENV_VALUE}"
-	env_to_variable "${BUILD_ENV_DOCKER_VALUE}"
+  env_to_variable "${BUILD_ENV_DOCKER_VALUE}"
 	docker_version_check
 	echo '===== Docker version check end...'
 
@@ -93,8 +92,6 @@ docker_version_check() {
 		NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 	fi
 
-	variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_DOCKER_PATH
-
 	# ---------- 무중단 배포 용도 시작 ---------- #
 	#Docker compose type 확인
 	#if [ "${DOCKER_CONTAINER_TYPE}" = "blue" ]; then
@@ -155,7 +152,18 @@ mattermost_build() {
 
   echo "Docker image push 시작"
   docker push ${DOCKER_IMAGE_NM}:$NEW_VERSION
+  DOCKER_PUSH_CODE=$?
   echo "Docker image push 완료"
+
+  if [ $DOCKER_PUSH_CODE -eq 0 ]; then
+    echo "Docker hub 에 $NEW_VERSION 버전으로 image 를 Push 했습니다 !"
+    echo "Docker Env Version 변경 시작"
+	  variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_DOCKER_PATH
+    echo "Docker Env Version 변경 완료"
+  else
+    echo "Docker hub 에 Image Push 중 오류가 발생했습니다."
+    exit 24; # 존재하지 않는 version
+  fi
 }
 
 main
