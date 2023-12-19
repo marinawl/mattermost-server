@@ -776,23 +776,33 @@ const AdvanceTextEditor = ({
 
                     <div className={'advanced_text_editor_ils_link'}>
                         <span>
-                             <ExternalLink
-                                 location='textbox_links'
-                                 href={'https://is.ilscp.net/'}
-                                 className='textbox-help-link'
-                             >
-                                 포탈 시스템
-                             </ExternalLink>
+                            <ExternalLink
+                                location='textbox_links'
+                                href={'https://www.ilscpt.com'}
+                                className='ilscp-decoration-none'
+                            >
+                                with 일성
+                            </ExternalLink>
                         </span>
                         <div />
                         <span>
-                             <ExternalLink
-                                 location='textbox_links'
-                                 href={'https://hrm-dev.ilscp.net/auth'}
-                                 className='textbox-help-link'
-                             >
-                                 인사운영 시스템
-                             </ExternalLink>
+                            <ExternalLink
+                                location='textbox_links'
+                                href={'https://ilscph.com'}
+                                className='ilscp-decoration-none'
+                            >
+                                인사운영
+                            </ExternalLink>
+                        </span>
+                        <div />
+                        <span>
+                            <ExternalLink
+                                location='textbox_links'
+                                href={'https://is.ilscp.net'}
+                                className='ilscp-decoration-none'
+                            >
+                                포털
+                            </ExternalLink>
                         </span>
                     </div>
                 </div>

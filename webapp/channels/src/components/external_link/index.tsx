@@ -27,6 +27,7 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     queryParams?: ExternalLinkQueryParams;
     location?: string;
     children: React.ReactNode;
+    className: string;
 };
 
 export default function ExternalLink(props: Props) {
@@ -74,6 +75,7 @@ export default function ExternalLink(props: Props) {
             rel={props.rel || 'noopener noreferrer'}
             onClick={handleClick}
             href={href}
+            className={props.className}
         >
             {props.children}
         </a>

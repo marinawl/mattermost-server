@@ -231,18 +231,25 @@
 
 .advanced_text_editor_ils_link {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     min-width: 100px;
     justify-content: flex-end;
     font-size: 12px;
     align-items: center;
+    margin-right: 4px;
 
     span {
-        color: #3098f8;
-        cursor: pointer;
+        padding: 0 8px;
+        border-radius: 6px;
 
         &:hover {
-            opacity: .7;
+            transition: all 0.15s ease 0s;
+            background-color: rgba(85, 99, 114, 0.15) !important;
+            opacity: .8;
+        }
+
+        &:not(:hover) {
+            transition: all 0.15s ease 0s;
         }
     }
 
