@@ -139,8 +139,8 @@ mattermost_build() {
 
 	sleep 3
 
-	# server dir 접근
-	cd $DIR/server/build
+	# server/build dir 접근
+	cd build
 
   # docker hub 로그인
   echo "Docker hub 로그인 시도"
