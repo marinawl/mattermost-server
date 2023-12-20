@@ -5,9 +5,6 @@ COMPOSE_PATH=docker-compose-server.production.yml
 # ENV
 BUILD_ENV_PATH=.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
-# ENV-DOCKER
-BUILD_ENV_DOCKER_PATH=.env.docker
-BUILD_ENV_DOCKER_VALUE=`cat ${BUILD_ENV_DOCKER_PATH}`
 
 # Docker image 현재 버전
 VERSION='0.0.1'
@@ -17,7 +14,6 @@ main() {
 
   echo '===== env check Start...'
   env_to_variable "${BUILD_ENV_VALUE}"
-  env_to_variable "${BUILD_ENV_DOCKER_VALUE}"
   echo '===== env check end...'
 
   echo '===== Docker Image Build Start...'
@@ -110,22 +106,22 @@ docker_image_build() {
   done
 }
 
-# Docker image & Docekr Container 생성
+# Docker image & Docker Container 생성
 docker_build() {
   echo "===== env 버전 정보를 동기화 합니다. "
-  variable_to_env "DOCKER_IMAGE_VERSION=.*" "DOCKER_IMAGE_VERSION=${VERSION}" $BUILD_ENV_DOCKER_PATH
+  variable_to_env "DOCKER_IMAGE_VERSION=.*" "DOCKER_IMAGE_VERSION=${VERSION}" $BUILD_ENV_PATH
 
   sleep 3
 
   # 이전 컨테이너 종료
   echo "===== ${DOCKER_CONTAINER_NM} 기존 컨테이너를 삭제 및 종료합니다. "
-  docker compose --env-file .env --env-file .env.docker -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} down
+  docker compose --env-file .env -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} down
 
   sleep 3
 
   # Docker container 생성
   echo "===== ${DOCKER_CONTAINER_NM} 새로운 컨테이너 업로드 합니다."
-  docker compose --env-file .env --env-file .env.docker -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
+  docker compose --env-file .env -p ${DOCKER_CONTAINER_NM} -f ${COMPOSE_PATH} up -d
 }
 
 #test

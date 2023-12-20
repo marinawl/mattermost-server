@@ -26,22 +26,22 @@ main() {
 	echo '===== Git pull Start...'
 	git_pull
 	echo '===== Git pull end...'
-	
+
 	echo '===== Docker version check Start...'
 	env_to_variable "${BUILD_ENV_VALUE}"
 	docker_version_check
 	echo '===== Docker version check end...'
-	
+
 	echo '===== Build Start...'
 	mattermost_build
 	echo '===== Build End...'
-	
+
 	sleep 3
-	
+
 	echo '===== Docker Start...'
 	docker_build
 	echo -e '===== Docker Start...\n'
-	
+
 	echo "===== Prev version: $VERSION"
 	echo "=====  New version: $NEW_VERSION"
 	echo '===== Script End ====='
@@ -54,13 +54,13 @@ env_to_variable()
 		# \r 전부 제거
 		env=$(echo $env | tr -d '\r')
 		IFS="=" read -r key value <<< "$env"
-		
+
 		eval $key=$value
 	done
 }
 
 # 전역변수를 env 값으로 변경
-variable_to_env() 
+variable_to_env()
 {
 	sed -i "s/${1}/${2}/g" $3
 }
@@ -72,14 +72,14 @@ git_pull() {
 
 #Docker image 버전 변경 & Docker compose 설정 변경
 docker_version_check() {
-	#Docekr image 버전 확인
+	#Docker image 버전 확인
 	if [ ! -e $BUILD_ENV_PATH ]; then
 		echo 'Build Failed: NOT FOUND .env ...'
-		
+
 		return 24
-	else 
+	else
 		VERSION=$DOCKER_IMAGE_VERSION
-		
+
 		# 버전을 "."로 분리하여 배열로 저장
 		IFS='.' read -ra PARTS <<< "$VERSION"
 
@@ -105,7 +105,7 @@ docker_version_check() {
 		# 새 버전을 문자열로 조합
 		NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 	fi
-	
+
 	#Docker compose type 확인
 	if [ "${DOCKER_CONTAINER_TYPE}" = "blue" ]; then
 		CONTAINER_TYPE="green"
@@ -114,69 +114,69 @@ docker_version_check() {
 		CONTAINER_TYPE="blue"
 		CONTAINER_PORT=8062
 	fi
-	
+
 	variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_PATH
 	variable_to_env "DOCKER_CONTAINER_TYPE=${DOCKER_CONTAINER_TYPE}" "DOCKER_CONTAINER_TYPE=${CONTAINER_TYPE}" $BUILD_ENV_PATH
-	variable_to_env "DOCEKR_CONTAINER_PORT=${DOCEKR_CONTAINER_PORT}" "DOCEKR_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
+	variable_to_env "DOCKER_CONTAINER_PORT=${DOCKER_CONTAINER_PORT}" "DOCKER_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
 }
 
 # Mattermost 서버 빌드
 mattermost_build() {
 	# webapp dir 접근
 	cd $DIR/webapp/channels
-	
+
 	echo '===== Webapp npm install starting...'
-	npm install 
+	npm install
 	echo '===== Webapp npm install end...'
-	
+
 	sleep 3
-	
+
 	echo '===== Webapp npm build starting...'
 	npm run build
 	echo '===== Webapp npm build end...'
-	
+
 	# server dir 접근
 	cd $DIR/server
-	
+
 	echo '===== Mattermost Server build starting...'
 	# linux build
 	make build-linux
-	
+
 	# build  파일을 linux 용 tar 로 package
 	make package-linux
 	echo '===== Mattermost Server build end...'
-	
+
 	mkdir $PACKAGE_PATH
 	cp $DIR/server/dist/mattermost-team-linux-amd64.tar.gz $PACKAGE_PATH
 	cp $DIR/server/config/config.json $PACKAGE_PATH
 }
 
-# Docker image & Docekr Container 생성
+# Docker image & Docker Container 생성
 docker_build() {
 	cd $DIR/server/build
-	
+
 	# Docker image 생성
 	docker build --tag $DOCKER_IMAGE_NM:$NEW_VERSION .
-	
+
 	sleep 3
-	
+
 	# Docker container 생성
 	docker compose -p "${DOCKER_IMAGE_NM}_${CONTAINER_TYPE}" -f $COMPOSE_PATH up -d
 	echo "===== ${DOCKER_IMAGE_NM}_${CONTAINER_TYPE} container up"
-	 
+
 	sleep 3
-	
+
 	# 새로운 컨테이너가 제대로 떴는지 확인
 	EXIST_AFTER=$(docker compose -p ${DOCKER_IMAGE_NM}_${CONTAINER_TYPE} -f ${COMPOSE_PATH} ps | grep Up)
-	
+
 	if [ -n "$EXIST_AFTER" ]; then
 		cp /etc/nginx/mattermost/nginx.mattermost.${CONTAINER_TYPE}.conf /etc/nginx/conf.d/nginx.mattermost.conf
 		nginx -s reload
-	
+
 		# 이전 컨테이너 종료
 		docker compose -p ${DOCKER_IMAGE_NM}_${DOCKER_CONTAINER_TYPE} -f ${COMPOSE_PATH} down
 		echo "===== ${DOCKER_IMAGE_NM}_${DOCKER_CONTAINER_TYPE} container down"
 	fi
 }
 
-main 
+main
