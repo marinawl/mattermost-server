@@ -774,37 +774,39 @@ const AdvanceTextEditor = ({
                         postId={postId}
                     />
 
-                    <div className={'advanced_text_editor_ils_link'}>
-                        <span>
-                            <ExternalLink
-                                location='textbox_links'
-                                href={'https://www.ilscpt.com'}
-                                className='ilscp-decoration-none'
-                            >
-                                with 일성
-                            </ExternalLink>
-                        </span>
-                        <div />
-                        <span>
-                            <ExternalLink
-                                location='textbox_links'
-                                href={'https://ilscph.com'}
-                                className='ilscp-decoration-none'
-                            >
-                                인사운영
-                            </ExternalLink>
-                        </span>
-                        <div />
-                        <span>
-                            <ExternalLink
-                                location='textbox_links'
-                                href={'https://is.ilscp.net'}
-                                className='ilscp-decoration-none'
-                            >
-                                포털
-                            </ExternalLink>
-                        </span>
-                    </div>
+                    {location === Locations.CENTER && (
+                        <div className={'advanced_text_editor_ils_link'}>
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://www.ilscpt.com'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    with 일성
+                                </ExternalLink>
+                            </span>
+                            <div />
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://ilscph.com'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    인사운영
+                                </ExternalLink>
+                            </span>
+                            <div />
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://is.ilscp.net'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    포털
+                                </ExternalLink>
+                            </span>
+                        </div>)
+                    }
                 </div>
             </div>
         </>

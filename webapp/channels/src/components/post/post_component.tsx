@@ -600,6 +600,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                         postId={post.id}
                                         location={props.location}
                                         timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? 'narrow' : undefined}}
+                                        isConsecutivePost={props.isConsecutivePost}
                                     />
                                 }
                                 {priority}
