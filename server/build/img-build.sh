@@ -9,9 +9,6 @@ PACKAGE_PATH=$SH_DIR/package
 # ENV
 BUILD_ENV_PATH=$SH_DIR/.env
 BUILD_ENV_VALUE=`cat ${BUILD_ENV_PATH}`
-# ENV-DOCKER
-BUILD_ENV_DOCKER_PATH=$SH_DIR/.env.docker
-BUILD_ENV_DOCKER_VALUE=`cat ${BUILD_ENV_DOCKER_PATH}`
 
 # Docker image 현재 버전
 VERSION='1.0.0'
@@ -58,8 +55,8 @@ variable_to_env()
 
 #Docker image 버전 변경 & Docker compose 설정 변경
 docker_version_check() {
-	#Docekr image 버전 확인
-	if [ ! -e $BUILD_ENV_DOCKER_PATH ]; then
+	#Docker image 버전 확인
+	if [ ! -e $BUILD_ENV_PATH ]; then
 		echo 'Build Failed: NOT FOUND .env ...'
 
 		return 24
@@ -103,7 +100,7 @@ docker_version_check() {
 	#fi
 
 	#variable_to_env "DOCKER_CONTAINER_TYPE=${DOCKER_CONTAINER_TYPE}" "DOCKER_CONTAINER_TYPE=${CONTAINER_TYPE}" $BUILD_ENV_PATH
-	#variable_to_env "DOCEKR_CONTAINER_PORT=${DOCEKR_CONTAINER_PORT}" "DOCEKR_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
+	#variable_to_env "DOCKER_CONTAINER_PORT=${DOCKER_CONTAINER_PORT}" "DOCKER_CONTAINER_PORT=${CONTAINER_PORT}" $BUILD_ENV_PATH
 	# ---------- 무중단 배포 용도 종료 ---------- #
 }
 
@@ -139,8 +136,8 @@ mattermost_build() {
 
 	sleep 3
 
-	# server dir 접근
-	cd $DIR/server/build
+	# server/build dir 접근
+	cd build
 
   # docker hub 로그인
   echo "Docker hub 로그인 시도"
@@ -158,7 +155,7 @@ mattermost_build() {
   if [ $DOCKER_PUSH_CODE -eq 0 ]; then
     echo "Docker hub 에 $NEW_VERSION 버전으로 image 를 Push 했습니다 !"
     echo "Docker Env Version 변경 시작"
-	  variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_DOCKER_PATH
+	  variable_to_env "DOCKER_IMAGE_VERSION=${DOCKER_IMAGE_VERSION}" "DOCKER_IMAGE_VERSION=${NEW_VERSION}" $BUILD_ENV_PATH
     echo "Docker Env Version 변경 완료"
   else
     echo "Docker hub 에 Image Push 중 오류가 발생했습니다."

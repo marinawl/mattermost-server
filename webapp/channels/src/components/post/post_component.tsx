@@ -313,7 +313,7 @@ const PostComponent = (props: Props): JSX.Element => {
             'post--comment same--root': fromAutoResponder,
             'post--pinned-or-flagged': (post.is_pinned || props.isFlagged) && props.location === Locations.CENTER,
             'mention-comment': props.isCommentMention,
-            'post--thread': props.location === Locations.RHS_COMMENT || props.location === Locations.RHS_ROOT,
+            'post--thread': isRHS,
         });
     };
 
@@ -600,6 +600,7 @@ const PostComponent = (props: Props): JSX.Element => {
                                         postId={post.id}
                                         location={props.location}
                                         timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? 'narrow' : undefined}}
+                                        isConsecutivePost={props.isConsecutivePost}
                                     />
                                 }
                                 {priority}

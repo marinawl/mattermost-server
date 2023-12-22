@@ -271,7 +271,8 @@ const PostOptions = (props: Props): JSX.Element => {
                 {postReaction}
                 {flagIcon}
                 {pluginItems}
-                {actionsMenu}
+                {/* ils - 불필요 아이콘 삭제 */}
+                {/*{actionsMenu}*/}
                 {commentIcon}
                 {(collapsedThreadsEnabled || showRecentlyUsedReactions) && dotMenu}
             </div>

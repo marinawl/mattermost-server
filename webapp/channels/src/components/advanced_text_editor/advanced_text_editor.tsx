@@ -120,6 +120,9 @@ type Props = {
     replyToLastPost?: (e: React.KeyboardEvent) => void;
     caretPosition: number;
     placeholder?: string;
+
+    // ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+    isMobileView: boolean;
 }
 
 const AdvanceTextEditor = ({
@@ -183,6 +186,9 @@ const AdvanceTextEditor = ({
     replyToLastPost,
     caretPosition,
     placeholder,
+
+    // ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+    isMobileView,
 }: Props) => {
     const readOnlyChannel = !canPost;
     const {formatMessage} = useIntl();
@@ -774,27 +780,40 @@ const AdvanceTextEditor = ({
                         postId={postId}
                     />
 
-                    <div className={'advanced_text_editor_ils_link'}>
-                        <span>
-                             <ExternalLink
-                                 location='textbox_links'
-                                 href={'https://is.ilscp.net/'}
-                                 className='textbox-help-link'
-                             >
-                                 포탈 시스템
-                             </ExternalLink>
-                        </span>
-                        <div />
-                        <span>
-                             <ExternalLink
-                                 location='textbox_links'
-                                 href={'https://hrm-dev.ilscp.net/auth'}
-                                 className='textbox-help-link'
-                             >
-                                 인사운영 시스템
-                             </ExternalLink>
-                        </span>
-                    </div>
+                    {/* ils - 메인화면 & 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시) */}
+                    {location === Locations.CENTER && !isMobileView && (
+                        <div className={'advanced_text_editor_ils_link'}>
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://www.ilscpt.com'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    with 일성
+                                </ExternalLink>
+                            </span>
+                            <div />
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://ilscph.com'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    인사운영
+                                </ExternalLink>
+                            </span>
+                            <div />
+                            <span>
+                                <ExternalLink
+                                    location='textbox_links'
+                                    href={'https://is.ilscp.net'}
+                                    className='ilscp-decoration-none'
+                                >
+                                    포털
+                                </ExternalLink>
+                            </span>
+                        </div>)
+                    }
                 </div>
             </div>
         </>

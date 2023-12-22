@@ -160,6 +160,9 @@ export type Props = {
 
     isPostPriorityEnabled: boolean;
 
+    // ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+    isMobileView: boolean;
+
     actions: {
 
         //Set show preview for textbox
@@ -1471,6 +1474,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     onMessageChange={this.onMessageChange}
                     replyToLastPost={this.replyToLastPost}
                     caretPosition={this.state.caretPosition}
+
+                    // ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+                    isMobileView={this.props.isMobileView}
                 />
             </form>
         );

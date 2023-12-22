@@ -61,6 +61,9 @@ import type {GlobalState} from 'types/store/index.js';
 
 import AdvancedCreatePost from './advanced_create_post';
 
+// ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+import {getIsMobileView} from 'selectors/views/browser';
+
 function makeMapStateToProps() {
     const getMessageInHistoryItem = makeGetMessageInHistoryItem(Posts.MESSAGE_TYPES.POST as any);
     const getChannelDraft = makeGetChannelDraft();
@@ -135,6 +138,9 @@ function makeMapStateToProps() {
             useCustomGroupMentions,
             isPostPriorityEnabled: isPostPriorityEnabled(state),
             postEditorActions,
+
+            // ils - 모바일 여부 (ils 링크표시 체크용 - 모바일 미표시)
+            isMobileView: getIsMobileView(state),
         };
     };
 }

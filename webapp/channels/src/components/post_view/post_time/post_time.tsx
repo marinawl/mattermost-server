@@ -41,6 +41,9 @@ type Props = {
     postId: string;
     teamUrl: string;
     timestampProps?: ComponentProps<typeof Timestamp>;
+
+    // ils - 댓글 시간표현을 위해 추가
+    isConsecutivePost: boolean;
 }
 
 export default class PostTime extends React.PureComponent<Props> {
@@ -63,6 +66,7 @@ export default class PostTime extends React.PureComponent<Props> {
             postId,
             teamUrl,
             timestampProps = {},
+            isConsecutivePost,
         } = this.props;
 
         /* 메시지 전송시간 포멧 변경 */
@@ -75,9 +79,13 @@ export default class PostTime extends React.PureComponent<Props> {
             />
         );*/
 
-        const time = moment(eventTime).format('YYYY-MM-DD (dd) a hh:mm');
+        const time = moment(eventTime).format(isConsecutivePost ? 'a h:mm' : 'MM월 DD일 (dd) a h:mm');
+
+        // ils - 툴팁 시간 표현을 위해 생성
+        const tooltipTime = moment(eventTime).format('YYYY. MM. DD (dd) a h:mm:ss');
+
         const postTime = (
-            <time style={{fontSize: '0.9em', opacity:0.6}}>{time}</time>
+            <time style={{fontSize: '0.9em', opacity: 0.6}}>{time}</time>
         );
 
         const content = isMobile() || !isPermalink ? (
@@ -108,7 +116,7 @@ export default class PostTime extends React.PureComponent<Props> {
                         id={eventTime.toString()}
                         className='hidden-xs'
                     >
-                        {time}
+                        {tooltipTime}
                         {/*<Timestamp
                             value={eventTime}
                             ranges={POST_TOOLTIP_RANGES}

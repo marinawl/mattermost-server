@@ -36,3 +36,9 @@ button.style--link {
         color: desaturate($red, 20%);
     }
 }
+
+.ilscp-decoration-none {
+    text-decoration: none !important;
+    color: #556372 !important;
+    font-weight: 500;
+}
