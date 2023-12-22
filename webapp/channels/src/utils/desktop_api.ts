@@ -175,10 +175,11 @@ class DesktopAppAPI {
         url: string,
         sender: Sender
     ) => {
-        if (window.desktopAPI?.sendNotification) {
-            window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
-            return;
-        }
+        // sendNotification 인자를 바꿀 수 없어서 기존 방식으로 변경
+        // if (window.desktopAPI?.sendNotification) {
+        //     window.desktopAPI.sendNotification(title, body, channelId, teamId, url, silent, soundName);
+        //     return;
+        // }
 
         // get the desktop app to trigger the notification
         window.postMessage(
