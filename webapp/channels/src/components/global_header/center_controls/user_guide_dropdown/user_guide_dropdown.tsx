@@ -93,7 +93,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                         url={trainingResourcesLink}
                         text={intl.formatMessage({id: 'userGuideHelp.trainingResources', defaultMessage: 'Training resources'})}
                     />
-                )}*/}
+                )}
                 {this.props.enableAskCommunityLink === 'true' && (
                     <Menu.ItemExternalLink
                         id='askTheCommunityLink'
@@ -110,7 +110,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                         url={this.props.reportAProblemLink}
                         text={intl.formatMessage({id: 'userGuideHelp.reportAProblem', defaultMessage: 'Report a problem'})}
                     />
-                )}
+                )}*/}
                 <Menu.ItemAction
                     id='keyboardShortcuts'
                     iconClassName='icon-keyboard-return'
