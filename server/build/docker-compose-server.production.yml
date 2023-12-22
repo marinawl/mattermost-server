@@ -25,6 +25,10 @@ services:
 
       # necessary for bleve
       MM_BLEVESETTINGS_INDEXDIR: /mattermost/bleve-indexes
+      MM_BLEVESETTINGS_ENABLEINDEXING: true
+      MM_BLEVESETTINGS_ENABLESEARCHING: true
+      MM_BLEVESETTINGS_ENABLEAUTOCOMPLETE: true
+      MM_BLEVESETTINGS_BATCHSIZE: 1000
 
       # additional settings
       MM_SERVICESETTINGS_SITEURL: ${SITE_URL}

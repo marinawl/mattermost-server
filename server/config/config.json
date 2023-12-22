@@ -528,11 +528,11 @@
         "IgnoredPurgeIndexes": ""
     },
     "BleveSettings": {
-        "IndexDir": "/mattermost/bleve-indexes",
-        "EnableIndexing": true,
-        "EnableSearching": true,
-        "EnableAutocomplete": true,
-        "BatchSize": 1000
+        "IndexDir": "",
+        "EnableIndexing": false,
+        "EnableSearching": false,
+        "EnableAutocomplete": false,
+        "BatchSize": 10000
     },
     "DataRetentionSettings": {
         "EnableMessageDeletion": false,
