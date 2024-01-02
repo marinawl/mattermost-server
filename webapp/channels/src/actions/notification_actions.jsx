@@ -303,6 +303,7 @@ export function sendDesktopNotification(post, msgProps) {
         if (notify) {
             const sender = {
                 imgUrl: Utils.imageURLForUser(post.user_id ?? ''),
+                userId: post.user_id,
                 name: userFromPost.last_name,
                 message: msgPropsPost.message,
                 baseUrl: Client4.getUrl(),
