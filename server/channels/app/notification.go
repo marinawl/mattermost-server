@@ -388,7 +388,15 @@ func (a *App) SendNotifications(c request.CTX, post *model.Post, team *model.Tea
 
 			isExplicitlyMentioned := mentions.Mentions[id] > GMMention
 			isGM := channel.Type == model.ChannelTypeGroup
-			if ShouldSendPushNotification(profileMap[id], channelMemberNotifyPropsMap[id], isExplicitlyMentioned, status, post, isGM) {
+			pushResult1 := ShouldSendPushNotification(profileMap[id], channelMemberNotifyPropsMap[id], true, status, post)
+			resMessage := post.Message
+			resPushCnt := strings.Index(resMessage, "!호출")
+
+			if resPushCnt == 0 {
+				pushResult1 = true
+			}
+
+			if pushResult1 {
 				mentionType := mentions.Mentions[id]
 
 				replyToThreadType := ""
@@ -430,7 +438,16 @@ func (a *App) SendNotifications(c request.CTX, post *model.Post, team *model.Tea
 				}
 
 				isGM := channel.Type == model.ChannelTypeGroup
-				if ShouldSendPushNotification(profileMap[id], channelMemberNotifyPropsMap[id], false, status, post, isGM) {
+
+				pushResult2 := ShouldSendPushNotification(profileMap[id], channelMemberNotifyPropsMap[id], false, status, post, isGM)
+				resMessage := post.Message
+				resPushCnt := strings.Index(resMessage, "!호출")
+
+				if resPushCnt == 0 {
+					pushResult2 = true
+				}
+
+				if pushResult2 {
 					a.sendPushNotification(
 						notification,
 						profileMap[id],
@@ -462,7 +479,15 @@ func (a *App) SendNotifications(c request.CTX, post *model.Post, team *model.Tea
 				status = &model.Status{UserId: id, Status: model.StatusOffline, Manual: false, LastActivityAt: 0, ActiveChannel: ""}
 			}
 
-			if DoesStatusAllowPushNotification(profileMap[id].NotifyProps, status, post.ChannelId) {
+			pushResult3 := DoesStatusAllowPushNotification(profileMap[id].NotifyProps, status, post.ChannelId)
+			resMessage := post.Message
+			resPushCnt := strings.Index(resMessage, "!호출")
+
+			if resPushCnt == 0 {
+				pushResult3 = true
+			}
+
+			if pushResult3 {
 				a.sendPushNotification(
 					notification,
 					profileMap[id],
